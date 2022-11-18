@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id       String   @id
+  nome     String
+  email    String   @unique
+  login    String   @unique
+  password String
+  createAt DateTime @default(now())
+  updateAt DateTime
+}
+
+model Doctor {
+  id       String   @id
+  name     String
+  email    String   @unique
+  login    String   @unique
+  crm      String   @unique
+  password String
+  createAt DateTime @default(now())
+  updateAt DateTime
+}
+
+model Organization {
+  id       String   @id
+  name     String
+  email    String   @unique
+  login    String   @unique
+  cnpj     String   @unique
+  password String
+  createAt DateTime @default(now())
+  updateAt DateTime
+}
+
+model Patient {
+  id       String   @id
+  name     String
+  cpf      String   @unique
+  email    String   @unique
+  login    String   @unique
+  password String
+  createAt DateTime @default(now())
+  updateAt DateTime
+}
