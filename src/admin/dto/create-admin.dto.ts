@@ -3,7 +3,7 @@ import { IsString, IsNotEmpty, IsEmail, Matches } from "class-validator";
 
 export class CreateAdminDto {
   @ApiProperty({
-    description: "Admin`s name",
+    description: "Admin's name",
     example: "virtumed",
   })
   @IsString()
@@ -11,15 +11,15 @@ export class CreateAdminDto {
   name: string;
 
   @ApiProperty({
-    description: "Admin`s login",
-    example: "virtumeds2@equipe3.com",
+    description: "Admin's login",
+    example: "email@admin.com",
   })
   @IsEmail()
   email: string;
 
   @ApiProperty({
-    description: "Admin password",
-    example: "virtumed@123",
+    description: "Admin's password",
+    example: "@Abcd1234",
   })
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: "Too weak",
