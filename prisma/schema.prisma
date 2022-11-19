@@ -8,51 +8,51 @@ datasource db {
 }
 
 model Admin {
-  id       String  @id @default(uuid())
+  id       String @id @default(uuid())
   name     String
-  email    String  @unique
+  email    String @unique
   password String
   image    String
-  isAdmin  Boolean @default(true)
+  role     String @default("admin")
 
   createAt DateTime @default(now())
   updateAt DateTime
 }
 
 model Doctor {
-  id       String  @id @default(uuid())
+  id       String @id @default(uuid())
   name     String
-  email    String  @unique
-  crm      String  @unique
+  email    String @unique
+  crm      String @unique
   password String
   image    String
-  isDoctor Boolean @default(true)
+  role     String @default("doctor")
 
   createAt DateTime @default(now())
   updateAt DateTime
 }
 
 model Organization {
-  id             String  @id @default(uuid())
-  name           String
-  email          String  @unique
-  cnpj           String  @unique
-  password       String
-  image          String
-  isOrganization Boolean @default(true)
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  cnpj     String @unique
+  password String
+  image    String
+  role     String @default("organization")
 
   createAt DateTime @default(now())
   updateAt DateTime
 }
 
 model Patient {
-  id        String  @id @default(uuid())
-  name      String
-  cpf       String  @unique
-  email     String  @unique
-  password  String
-  image     String
-  isPatient Boolean @default(true)
+  id       String @id @default(uuid())
+  name     String
+  cpf      String @unique
+  email    String @unique
+  password String
+  image    String
+  role     String @default("patient")
 
   createAt DateTime @default(now())
   updateAt DateTime
