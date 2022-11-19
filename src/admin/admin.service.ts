@@ -43,6 +43,6 @@ export class AdminService {
   async remove(id: string){
     await this.findOne(id)
     await this.prisma.admin.delete({where: {id}})
-    return 'Deletado com sucesso'
+    return `Registro com o id:${id} deletado com sucesso`
   }
 }
