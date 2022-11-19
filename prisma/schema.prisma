@@ -16,7 +16,7 @@ model Admin {
   role     String @default("admin")
 
   createAt DateTime @default(now())
-  updateAt DateTime
+  updateAt DateTime @default(now())
 }
 
 model Doctor {
@@ -29,7 +29,7 @@ model Doctor {
   role     String @default("doctor")
 
   createAt DateTime @default(now())
-  updateAt DateTime
+  updateAt DateTime @default(now())
 }
 
 model Organization {
@@ -42,7 +42,7 @@ model Organization {
   role     String @default("organization")
 
   createAt DateTime @default(now())
-  updateAt DateTime
+  updateAt DateTime @default(now())
 }
 
 model Patient {
@@ -55,5 +55,5 @@ model Patient {
   role     String @default("patient")
 
   createAt DateTime @default(now())
-  updateAt DateTime
+  updateAt DateTime @default(now())
 }
