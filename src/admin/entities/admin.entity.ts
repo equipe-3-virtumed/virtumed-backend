@@ -4,8 +4,8 @@ export class Admin {
   email: String;
   password: String;
   image: String;
-  isAdmin:  Boolean;
-
+  
+  role?: String;
   createAt?: Date;
   updateAt?: Date;
 }

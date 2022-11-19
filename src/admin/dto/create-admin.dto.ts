@@ -25,4 +25,10 @@ export class CreateAdminDto {
     message: "Too weak",
   })
   password: string;
+  
+  @ApiProperty({
+    description: "Link da iamgem",
+    example: "url",
+  })
+  image: string
 }
