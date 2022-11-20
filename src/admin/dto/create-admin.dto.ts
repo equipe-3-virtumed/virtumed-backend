@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsNotEmpty, IsEmail, Matches } from "class-validator";
 
 export class CreateAdminDto {
+  // NAME
   @ApiProperty({
     description: "Admin's name",
     example: "virtumed",
@@ -9,7 +10,8 @@ export class CreateAdminDto {
   @IsString()
   @IsNotEmpty()
   name: string;
-
+  
+  // LOGIN
   @ApiProperty({
     description: "Admin's login",
     example: "email@admin.com",
@@ -17,6 +19,7 @@ export class CreateAdminDto {
   @IsEmail()
   email: string;
 
+  // PASSWORD
   @ApiProperty({
     description: "Admin's password",
     example: "@Abcd1234",
@@ -25,10 +28,11 @@ export class CreateAdminDto {
     message: "Too weak",
   })
   password: string;
-  
+
+  // IMAGE
   @ApiProperty({
-    description: "Link da iamgem",
+    description: "Link Image Admin",
     example: "url",
   })
-  image: string
+  image: string;
 }
