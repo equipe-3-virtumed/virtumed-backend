@@ -30,7 +30,7 @@ export class AdminController {
   }
 
   @ApiOperation({
-    summary: 'View all Admmin'
+    summary: 'View all Admmin`s'
   })
   // @UseGuards(AuthGuard())
   // @ApiBearerAuth()
