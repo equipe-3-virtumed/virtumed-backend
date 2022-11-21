@@ -11,7 +11,7 @@ export class CreateDoctorDto {
   @IsNotEmpty()
   name: string;
 
- // LOGIN
+  // LOGIN
   @ApiProperty({
     description: "Doctor's login",
     example: "email@admin.com",
@@ -19,14 +19,14 @@ export class CreateDoctorDto {
   @IsEmail()
   email: string;
 
- // CRM
+  // CRM
   @ApiProperty({
     description: "Doctor`s document",
     example: "CRM/BA.123456",
-  }) 
+  })
   crm: string;
-  
- // PASSWORD
+
+  // PASSWORD
   @ApiProperty({
     description: "Admin's password",
     example: "@Abcd1234",
@@ -41,5 +41,13 @@ export class CreateDoctorDto {
     description: "Link image Doctor",
     example: "url",
   })
-  image: string
+  image: string;
+
+  // ROLE
+  @ApiProperty({
+    description: "Função no sistema",
+    example: "doctor",
+  })
+  @IsString()
+  role: string;
 }
