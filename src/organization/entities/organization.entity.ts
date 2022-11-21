@@ -5,8 +5,8 @@ export class Organization {
   cnpj: String;
   password: String;
   image: String;
-  role: String;
 
-  createdAt?: Date;
-  updatedAt?: Date;
+  role?: String;
+  createAt?: Date;
+  updateAt?: Date;
 }
