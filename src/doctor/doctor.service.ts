@@ -1,26 +1,44 @@
-import { Injectable } from '@nestjs/common';
-import { CreateDoctorDto } from './dto/create-doctor.dto';
-import { UpdateDoctorDto } from './dto/update-doctor.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { PrismaService } from "src/prisma/prisma.service";
+import { CreateDoctorDto } from "./dto/create-doctor.dto";
+import { UpdateDoctorDto } from "./dto/update-doctor.dto";
 
 @Injectable()
 export class DoctorService {
-  create(createDoctorDto: CreateDoctorDto) {
-    return 'This action adds a new doctor';
+  constructor(private prisma: PrismaService) {}
+
+  async findOne(id: string) {
+    const record = this.prisma.doctor.findUnique({ where: { id } });
+    if (!record) {
+      throw new NotFoundException(
+        `registro do Médico com o ID: ${id} não encontrado`
+      );
+    }
+    return record;
   }
 
   findAll() {
-    return `This action returns all doctor`;
+    return this.prisma.doctor.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} doctor`;
+  async create(createDoctorDto: CreateDoctorDto) {
+    const doctor: any = { ...CreateDoctorDto };
+    return this.prisma.doctor.create({ data: doctor }).catch(this.handleError);
+  }
+  handleError(error: Error) {
+    console.log(error);
+    return undefined;
   }
 
-  update(id: number, updateDoctorDto: UpdateDoctorDto) {
-    return `This action updates a #${id} doctor`;
+  async update(id: string, updateDoctorDto: UpdateDoctorDto) {
+    await this.findOne(id);
+    const data: any = { ...updateDoctorDto };
+    return this.prisma.doctor.update({ data, where: { id } });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} doctor`;
+  async remove(id: string) {
+    await this.findOne(id);
+    await this.prisma.doctor.delete({ where: { id } });
+    return `Registro do Médico com o ID:${id} deletado com sucesso`;
   }
 }
