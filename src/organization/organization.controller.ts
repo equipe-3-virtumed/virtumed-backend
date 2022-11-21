@@ -30,7 +30,7 @@ export class OrganizationController {
   }
 
   @ApiOperation({
-    summary: 'View Doctor by id'
+    summary: 'View Organization by id'
   })
   // @UseGuards(AuthGuard())
   // @ApiBearerAuth()
@@ -50,7 +50,7 @@ export class OrganizationController {
   }
 
   @ApiOperation({
-    summary: 'Delete Doctor by id',
+    summary: 'Delete Organization by id',
   })
   // @UseGuards(AuthGuard())
   // @ApiBearerAuth()
