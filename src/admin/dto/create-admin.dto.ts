@@ -10,11 +10,11 @@ export class CreateAdminDto {
   @IsString()
   @IsNotEmpty()
   name: string;
-  
+
   // LOGIN
   @ApiProperty({
     description: "Admin's login",
-    example: "email@admin.com",
+    example: "admin@virtumed.com",
   })
   @IsEmail()
   email: string;
@@ -35,4 +35,12 @@ export class CreateAdminDto {
     example: "url",
   })
   image: string;
+
+  // ROLE
+  @ApiProperty({
+    description: "Função no sistema",
+    example: "admin",
+  })
+  @IsString()
+  role: string;
 }
