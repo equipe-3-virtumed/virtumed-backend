@@ -24,6 +24,9 @@ model Doctor {
   name     String
   email    String @unique
   crm      String @unique
+  // CPF
+  // data de nascimento
+  // especialidade
   password String
   image    String
   role     String @default("doctor")
@@ -40,6 +43,7 @@ model Organization {
   password String
   image    String
   role     String @default("organization")
+  // criar medico
 
   createAt DateTime @default(now())
   updateAt DateTime @default(now())
@@ -57,3 +61,9 @@ model Patient {
   createAt DateTime @default(now())
   updateAt DateTime @default(now())
 }
+
+//model Room {
+//  id
+// id do medico
+// id do paciente
+//}
