@@ -17,6 +17,8 @@ import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
 
 @ApiTags("Admin")
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 @Controller("admin")
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
@@ -24,8 +26,6 @@ export class AdminController {
   @ApiOperation({
     summary: "Create Admin",
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Post()
   create(@Body() createAdminDto: CreateAdminDto) {
     return this.adminService.create(createAdminDto);
@@ -34,8 +34,6 @@ export class AdminController {
   @ApiOperation({
     summary: 'View all Admin`s'
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Get()
   findAll() {
     return this.adminService.findAll();
@@ -44,8 +42,6 @@ export class AdminController {
   @ApiOperation({
     summary: 'View Admin by id'
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.adminService.findOne(id);
@@ -54,8 +50,6 @@ export class AdminController {
   @ApiOperation({
     summary: 'Edit Admin by id',
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateAdminDto: UpdateAdminDto) {
     return this.adminService.update(id, updateAdminDto);
@@ -64,8 +58,7 @@ export class AdminController {
   @ApiOperation({
     summary: 'Delete Admin by id',
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
+
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(":id")
   remove(@Param("id") id: string) {

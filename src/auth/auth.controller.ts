@@ -16,6 +16,8 @@ import { LoginDto } from './dto/login.dto';
 import { LoggedUser } from './logged-admin.decorator';
 
 @Controller('auth')
+
+
 @ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -30,10 +32,11 @@ export class AuthController {
   }
 
   @Get()
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({
     summary: 'Retorna usuário autenticado no momento',
   })
+  
   @ApiBearerAuth()
   profile(@LoggedUser() admin: Admin) {
     return admin;
