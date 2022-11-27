@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpStatus,
   UseGuards,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
@@ -64,6 +66,7 @@ export class AdminController {
   })
   // @UseGuards(AuthGuard())
   // @ApiBearerAuth()
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.adminService.remove(id);
