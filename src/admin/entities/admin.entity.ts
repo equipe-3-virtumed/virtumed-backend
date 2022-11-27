@@ -1,11 +1,11 @@
 export class Admin {
-  id?: String;
-  name: String;
-  email: String;
-  password: String;
-  image: String;
+  id?: string;
+  name: string;
+  email: string;
+  password: string;
+  image: string;
   
-  role?: String;
+  role?: string;
   createAt?: Date;
   updateAt?: Date;
 }

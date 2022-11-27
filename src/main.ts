@@ -22,6 +22,7 @@ async function bootstrap() {
     .addTag('Doctor')
     .addTag('Patient')
     .addTag('Status')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);

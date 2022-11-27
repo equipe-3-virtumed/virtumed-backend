@@ -1,37 +1,65 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
+import * as bcrypt from "bcrypt";
 import { PrismaService } from "src/prisma/prisma.service";
+import { handleError } from "src/utils/handle-error.util";
 import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
+import { Admin } from "./entities/admin.entity";
 
 @Injectable()
 export class AdminService {
-  constructor(private prisma: PrismaService) {}
+  private adminSelect = {
+    id: true,
+    name: true,
+    email: true,
+    password: false,
+    image: true,
+    createAt: true,
+    updateAt: true,
+  };
 
-  async findOne(id: string) {
-    const record = this.prisma.admin.findUnique({ where: { id } });
+  constructor(private readonly prisma: PrismaService) {}
+  // Find all admin
+  findAll(): Promise<Admin[]> {
+    return this.prisma.admin.findMany({select: this.adminSelect});
+  }
+
+  // Function to check ID
+  async findById(id: string): Promise<Admin> {
+    const record = this.prisma.admin.findUnique({
+      where: { id },
+      select: this.adminSelect,
+    });
     if (!record) {
-      throw new NotFoundException(
-        `registro do Adm com o ID: ${id} não encontrado`
-      );
+      throw new NotFoundException(`Registro com o ID '${id}' não encontrado.`);
     }
     return record;
   }
 
-  findAll() {
-    return this.prisma.admin.findMany();
+  // Find user By ID
+  async findOne(id: string): Promise<Admin> {
+    return this.findById(id);
   }
 
-  async create(CreateAdminDto: CreateAdminDto) {
-    const admin: any = { ...CreateAdminDto };
+  // Create Admin
+  async create(CreateAdminDto: CreateAdminDto): Promise<Admin> { 
+    if (CreateAdminDto.password != CreateAdminDto.confirmPassword) {
+      throw new BadRequestException("A senhas digitadas não são iguais.");
+    }
+
+    delete CreateAdminDto.confirmPassword;
+
+    const data: Admin = {
+      ...CreateAdminDto,
+      password: await bcrypt.hash(CreateAdminDto.password, 8),
+    };
     return this.prisma.admin
-      .create({
-        data: admin,
-      })
-      .catch(this.handleError);
-  }
-  handleError(error: Error) {
-    console.log(error);
-    return undefined;
+      .create({ data, select: this.adminSelect })
+      .catch(handleError);
   }
 
   async update(id: string, updateAdmindto: UpdateAdminDto) {
