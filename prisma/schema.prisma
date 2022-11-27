@@ -17,6 +17,8 @@ model Admin {
 
   createAt DateTime @default(now())
   updateAt DateTime @default(now())
+
+  @@map("admin")
 }
 
 model Doctor {
@@ -33,6 +35,9 @@ model Doctor {
 
   createAt DateTime @default(now())
   updateAt DateTime @default(now())
+
+
+  @@map("doctor")
 }
 
 model Organization {
@@ -47,6 +52,8 @@ model Organization {
 
   createAt DateTime @default(now())
   updateAt DateTime @default(now())
+
+  @@map("organization")
 }
 
 model Patient {
@@ -59,11 +66,27 @@ model Patient {
   role     String @default("patient")
 
   createAt DateTime @default(now())
-  updateAt DateTime @default(now())
+  updateAt DateTime @default(now()) 
+
+  @@map("patient")
 }
 
-//model Room {
-//  id
-// id do medico
-// id do paciente
-//}
+// model Room {
+//   id String @default(uuid())
+
+//   Doctor   Doctor @relation(fields: [DoctorId], references: [id])
+//   DoctorId String @map("doctor_id")
+
+//   Patient   Patient @relation(fields: [PatientId], references: [id])
+//   PatientId String  @map("patient_id")
+
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("udpate_at")
+
+//   @@map("room")
+// }
+
+// model WorkStation {
+//   id String @default(uuid())
+
+// }
