@@ -1,12 +1,12 @@
 export class Doctor {
-  id?: String;
-  name: String;
-  email: String;
-  crm: String;
-  password: String;
-  image: String;
+  id?: string;
+  name: string;
+  email: string;
+  crm: string;
+  password: string;
+  image: string;
 
-  role?: String;
+  role?: string;
   createAt?: Date;
   updateAt?: Date;
 }
