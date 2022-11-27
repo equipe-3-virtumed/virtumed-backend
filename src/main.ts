@@ -14,7 +14,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Backend Virtumed')
     .setDescription('Documentação de rotas para cadastro, autorização e acesso')
-    .setVersion('1.0')
+    .setVersion('1.0.2')
     .addBearerAuth()
     .addTag('Auth')
     .addTag('Admin')

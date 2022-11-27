@@ -16,7 +16,7 @@ model Admin {
   role     String @default("admin")
 
   createAt DateTime @default(now())
-  updateAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 
   @@map("admin")
 }
@@ -34,7 +34,7 @@ model Doctor {
   role     String @default("doctor")
 
   createAt DateTime @default(now())
-  updateAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 
 
   @@map("doctor")
@@ -51,7 +51,7 @@ model Organization {
   // criar medico
 
   createAt DateTime @default(now())
-  updateAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 
   @@map("organization")
 }
@@ -66,7 +66,7 @@ model Patient {
   role     String @default("patient")
 
   createAt DateTime @default(now())
-  updateAt DateTime @default(now()) 
+  updateAt DateTime @updatedAt
 
   @@map("patient")
 }
