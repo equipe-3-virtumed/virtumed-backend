@@ -13,7 +13,7 @@ export class LoginDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Senha do Admin',
+    description: 'user password for authentication',
     example: 'AB@123cd',
   })
   password: string;

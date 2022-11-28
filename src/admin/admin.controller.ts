@@ -15,9 +15,10 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AdminService } from "./admin.service";
 import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
+import { Admin } from "./entities/admin.entity";
 
 @ApiTags("Admin")
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('adminJwt'))
 @ApiBearerAuth()
 @Controller("admin")
 export class AdminController {
@@ -27,15 +28,16 @@ export class AdminController {
     summary: "Create Admin",
   })
   @Post()
-  create(@Body() createAdminDto: CreateAdminDto) {
-    return this.adminService.create(createAdminDto);
+  async create(@Body() createAdminDto: CreateAdminDto): Promise<Admin> {
+    const register = await this.adminService.create(createAdminDto)
+    return { ...register} ;
   }
 
   @ApiOperation({
     summary: 'View all Admin`s'
   })
   @Get()
-  findAll() {
+  findAll(): Promise<Admin[]> {
     return this.adminService.findAll();
   }
 
@@ -43,7 +45,7 @@ export class AdminController {
     summary: 'View Admin by id'
   })
   @Get(":id")
-  findOne(@Param("id") id: string) {
+  findOne(@Param("id") id: string): Promise<Admin> {
     return this.adminService.findOne(id);
   }
 

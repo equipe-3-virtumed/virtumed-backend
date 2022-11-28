@@ -2,16 +2,18 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-} from "@nestjs/common";
-import * as bcrypt from "bcrypt";
-import { PrismaService } from "src/prisma/prisma.service";
-import { handleError } from "src/utils/handle-error.util";
-import { CreateAdminDto } from "./dto/create-admin.dto";
-import { UpdateAdminDto } from "./dto/update-admin.dto";
-import { Admin } from "./entities/admin.entity";
+} from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { handleError } from 'src/utils/handle-error.util';
+import { CreateAdminDto } from './dto/create-admin.dto';
+import { UpdateAdminDto } from './dto/update-admin.dto';
+import { Admin } from './entities/admin.entity';
 
 @Injectable()
 export class AdminService {
+  constructor(private readonly prisma: PrismaService) {}
+
   private adminSelect = {
     id: true,
     name: true,
@@ -22,10 +24,9 @@ export class AdminService {
     updateAt: true,
   };
 
-  constructor(private readonly prisma: PrismaService) {}
   // Find all admin
   findAll(): Promise<Admin[]> {
-    return this.prisma.admin.findMany({select: this.adminSelect});
+    return this.prisma.admin.findMany({ select: this.adminSelect });
   }
 
   // Function to check ID
@@ -46,9 +47,9 @@ export class AdminService {
   }
 
   // Create Admin
-  async create(CreateAdminDto: CreateAdminDto): Promise<Admin> { 
+  async create(CreateAdminDto: CreateAdminDto): Promise<Admin> {
     if (CreateAdminDto.password != CreateAdminDto.confirmPassword) {
-      throw new BadRequestException("A senhas digitadas não são iguais.");
+      throw new BadRequestException('A senhas digitadas não são iguais.');
     }
 
     delete CreateAdminDto.confirmPassword;
@@ -57,9 +58,11 @@ export class AdminService {
       ...CreateAdminDto,
       password: await bcrypt.hash(CreateAdminDto.password, 8),
     };
-    return this.prisma.admin
+
+    const createdAdmin = await this.prisma.admin
       .create({ data, select: this.adminSelect })
       .catch(handleError);
+    return { ...createdAdmin };
   }
 
   async update(id: string, updateAdmindto: UpdateAdminDto) {

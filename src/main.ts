@@ -16,13 +16,12 @@ async function bootstrap() {
     .setDescription('Documentação de rotas para cadastro, autorização e acesso')
     .setVersion('1.0.2')
     .addBearerAuth()
-    .addTag('Auth')
+    .addTag('Status')
+    .addTag('AdminAuth')
     .addTag('Admin')
     .addTag('Organization / Clinic')
     .addTag('Doctor')
     .addTag('Patient')
-    .addTag('Status')
-    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
