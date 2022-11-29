@@ -13,52 +13,85 @@ generator erd {
 }
 
 model Admin {
-  id       String  @id @default(uuid())
+  id       String @id @default(uuid())
   name     String
-  email    String  @unique
+  email    String @unique
   password String
   image    String
-  isAdmin  Boolean @default(true)
+  role     String @default("admin")
 
   createAt DateTime @default(now())
-  updateAt DateTime
+  updateAt DateTime @updatedAt
+
+  @@map("admin")
 }
 
 model Doctor {
-  id       String  @id @default(uuid())
+  id       String @id @default(uuid())
   name     String
-  email    String  @unique
-  crm      String  @unique
+  email    String @unique
+  crm      String @unique
+  // CPF
+  // data de nascimento
+  // especialidade
   password String
   image    String
-  isDoctor Boolean @default(true)
+  role     String @default("doctor")
 
   createAt DateTime @default(now())
-  updateAt DateTime
+  updateAt DateTime @updatedAt
+
+
+  @@map("doctor")
 }
 
 model Organization {
-  id             String  @id @default(uuid())
-  name           String
-  email          String  @unique
-  cnpj           String  @unique
-  password       String
-  image          String
-  isOrganization Boolean @default(true)
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  cnpj     String @unique
+  password String
+  image    String
+  role     String @default("organization")
+  // criar medico
 
   createAt DateTime @default(now())
-  updateAt DateTime
+  updateAt DateTime @updatedAt
+
+  @@map("organization")
 }
 
 model Patient {
-  id        String  @id @default(uuid())
-  name      String
-  cpf       String  @unique
-  email     String  @unique
-  password  String
-  image     String
-  isPatient Boolean @default(true)
+  id       String @id @default(uuid())
+  name     String
+  cpf      String @unique
+  email    String @unique
+  password String
+  image    String
+  role     String @default("patient")
 
   createAt DateTime @default(now())
-  updateAt DateTime
+  updateAt DateTime @updatedAt
+
+  @@map("patient")
 }
+
+// model Room {
+//   id String @default(uuid())
+
+//   Doctor   Doctor @relation(fields: [DoctorId], references: [id])
+//   DoctorId String @map("doctor_id")
+
+//   Patient   Patient @relation(fields: [PatientId], references: [id])
+//   PatientId String  @map("patient_id")
+
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("udpate_at")
+
+//   @@map("room")
+// }
+
+// model WorkStation {
+//   id String @default(uuid())
+
+// }
