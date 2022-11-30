@@ -35,12 +35,21 @@ export class CreateDoctorDto {
     message: "Too weak",
   })
   password: string;
+  
+    // CONFIRM PASSWORD
+    @ApiProperty({
+      description: 'Digite novamente a senha anterior',
+      example: '@Abcd1234',
+    })
+    confirmpassword: string;
 
-  //IMAGE
+  // IMAGE
   @ApiProperty({
-    description: "Link image Doctor",
-    example: "url",
+    description: "Imagem ou URL da imagem",
+    example:
+      "https://crbm5.gov.br/novosite/wp-content/uploads/2021/04/HCPA-site-1024x569.png",
   })
+  @IsString()
   image: string;
 
   // ROLE

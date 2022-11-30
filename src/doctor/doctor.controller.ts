@@ -6,7 +6,7 @@ import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @ApiTags('Doctor')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('adminJwt'))
 @ApiBearerAuth()
 @Controller('doctor')
 export class DoctorController {

@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Admin } from "src/admin/entities/admin.entity";
 import { Doctor } from "src/doctor/entities/doctor.entity";
+import { Organization } from "src/organization/entities/organization.entity";
 import { Patient } from "src/patient/entities/patient.entity";
 
 export class LoginResponseDto {
@@ -13,5 +14,5 @@ export class LoginResponseDto {
   @ApiProperty({
     description: 'Authenticated client data',
   })
-      client: Admin | Doctor | Patient
+      client:  Admin | Doctor | Organization | Patient 
     }

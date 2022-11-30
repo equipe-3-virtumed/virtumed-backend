@@ -8,85 +8,60 @@ datasource db {
 }
 
 model Admin {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-  image    String
-  role     String @default("admin")
-
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  name            String
+  email           String   @unique
+  password        String
+  confirmpassword String
+  image           String
+  role            String   @default("admin")
+  createAt        DateTime @default(now())
+  updateAt        DateTime @updatedAt
 
   @@map("admin")
 }
 
 model Doctor {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  crm      String @unique
-  // CPF
-  // data de nascimento
-  // especialidade
-  password String
-  image    String
-  role     String @default("doctor")
-
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
-
+  id              String   @id @default(uuid())
+  name            String
+  email           String   @unique
+  crm             String   @unique
+  password        String
+  confirmpassword String
+  image           String
+  role            String   @default("doctor")
+  createAt        DateTime @default(now())
+  updateAt        DateTime @updatedAt
 
   @@map("doctor")
 }
 
 model Organization {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  cnpj     String @unique
-  password String
-  image    String
-  role     String @default("organization")
-  // criar medico
-
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  name            String
+  email           String   @unique
+  cnpj            String   @unique
+  password        String
+  confirmpassword String
+  image           String
+  role            String   @default("organization")
+  createAt        DateTime @default(now())
+  updateAt        DateTime @updatedAt
 
   @@map("organization")
 }
 
 model Patient {
-  id       String @id @default(uuid())
-  name     String
-  cpf      String @unique
-  email    String @unique
-  password String
-  image    String
-  role     String @default("patient")
-
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  name            String
+  cpf             String   @unique
+  email           String   @unique
+  password        String
+  confirmpassword String
+  image           String
+  role            String   @default("patient")
+  createAt        DateTime @default(now())
+  updateAt        DateTime @updatedAt
 
   @@map("patient")
 }
-
-// model Room {
-//   id String @default(uuid())
-
-//   Doctor   Doctor @relation(fields: [DoctorId], references: [id])
-//   DoctorId String @map("doctor_id")
-
-//   Patient   Patient @relation(fields: [PatientId], references: [id])
-//   PatientId String  @map("patient_id")
-
-//   createdAt DateTime @default(now()) @map("created_at")
-//   updatedAt DateTime @updatedAt @map("udpate_at")
-
-//   @@map("room")
-// }
-
-// model WorkStation {
-//   id String @default(uuid())
-
-// }

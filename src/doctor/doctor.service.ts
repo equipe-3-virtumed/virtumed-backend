@@ -1,29 +1,70 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
-import { CreateDoctorDto } from "./dto/create-doctor.dto";
-import { UpdateDoctorDto } from "./dto/update-doctor.dto";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { handleError } from 'src/utils/handle-error.util';
+import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
+import { Doctor } from './entities/doctor.entity';
 
 @Injectable()
 export class DoctorService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async findOne(id: string) {
-    const record = this.prisma.doctor.findUnique({ where: { id } });
+  private doctorSelect = {
+    id: true,
+    name: true,
+    email: true,
+    crm: true,
+    password: false,
+    confirmpassword: false,
+    role: true,
+    image: true,
+    createAt: true,
+    updateAt: true,
+  };
+  // Find all doctors
+  findAll() {
+    return this.prisma.doctor.findMany({ select: this.doctorSelect });
+  }
+
+  // Function to check ID
+  async findById(id: string): Promise<Doctor> {
+    const record = this.prisma.doctor.findUnique({
+      where: { id },
+      select: this.doctorSelect,
+    });
     if (!record) {
-      throw new NotFoundException(
-        `registro do Médico com o ID: ${id} não encontrado`
-      );
+      throw new NotFoundException(`Registro com o ID '${id}' não encontrado.`);
     }
     return record;
   }
 
-  findAll() {
-    return this.prisma.doctor.findMany();
+  // Find Doctor By ID
+  async findOne(id: string): Promise<Doctor> {
+    return this.findById(id);
   }
 
-  async create(createDoctorDto: CreateDoctorDto) {
-    const doctor: any = { ...CreateDoctorDto };
-    return this.prisma.doctor.create({ data: doctor }).catch(this.handleError);
+  // Create Doctor
+  async create(CreateDoctorDto: CreateDoctorDto): Promise<Doctor> {
+    if (CreateDoctorDto.password != CreateDoctorDto.confirmpassword) {
+      throw new BadRequestException('A senhas digitadas não são iguais.');
+    }
+
+    delete CreateDoctorDto.confirmpassword;
+
+    const data: Doctor = {
+      ...CreateDoctorDto,
+      password: await bcrypt.hash(CreateDoctorDto.password, 8),
+    };
+
+    const createdDoctor = await this.prisma.doctor
+      .create({ data, select: this.doctorSelect })
+      .catch(handleError);
+    return { ...createdDoctor };
   }
   handleError(error: Error) {
     console.log(error);
