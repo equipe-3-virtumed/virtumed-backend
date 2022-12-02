@@ -1,10 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { PatientService } from './patient.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
-import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags('Patient')
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 @Controller('patient')
 export class PatientController {
   constructor(private readonly patientService: PatientService) {}
@@ -12,8 +15,6 @@ export class PatientController {
   @ApiOperation({
     summary: "Create Patient",
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Post()
   create(@Body() createPatientDto: CreatePatientDto) {
     return this.patientService.create(createPatientDto);
@@ -22,8 +23,6 @@ export class PatientController {
   @ApiOperation({
     summary: 'View all Patient`s'
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Get()
   findAll() {
     return this.patientService.findAll();
@@ -32,8 +31,6 @@ export class PatientController {
   @ApiOperation({
     summary: 'View Patient by id'
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.patientService.findOne(id);
@@ -42,8 +39,7 @@ export class PatientController {
   @ApiOperation({
     summary: 'Edit Patient by id',
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
     return this.patientService.update(id, updatePatientDto);
@@ -52,8 +48,6 @@ export class PatientController {
   @ApiOperation({
     summary: 'Delete Patient by id',
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.patientService.remove(id);

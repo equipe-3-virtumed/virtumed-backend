@@ -15,8 +15,11 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AdminService } from "./admin.service";
 import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
+import { Admin } from "./entities/admin.entity";
 
 @ApiTags("Admin")
+@UseGuards(AuthGuard('adminJwt'))
+@ApiBearerAuth()
 @Controller("admin")
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
@@ -24,38 +27,31 @@ export class AdminController {
   @ApiOperation({
     summary: "Create Admin",
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Post()
-  create(@Body() createAdminDto: CreateAdminDto) {
-    return this.adminService.create(createAdminDto);
+  async create(@Body() createAdminDto: CreateAdminDto): Promise<Admin> {
+    const register = await this.adminService.create(createAdminDto)
+    return { ...register} ;
   }
 
   @ApiOperation({
     summary: 'View all Admin`s'
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Get()
-  findAll() {
+  findAll(): Promise<Admin[]> {
     return this.adminService.findAll();
   }
 
   @ApiOperation({
     summary: 'View Admin by id'
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Get(":id")
-  findOne(@Param("id") id: string) {
+  findOne(@Param("id") id: string): Promise<Admin> {
     return this.adminService.findOne(id);
   }
 
   @ApiOperation({
     summary: 'Edit Admin by id',
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateAdminDto: UpdateAdminDto) {
     return this.adminService.update(id, updateAdminDto);
@@ -64,8 +60,7 @@ export class AdminController {
   @ApiOperation({
     summary: 'Delete Admin by id',
   })
-  // @UseGuards(AuthGuard())
-  // @ApiBearerAuth()
+
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(":id")
   remove(@Param("id") id: string) {
