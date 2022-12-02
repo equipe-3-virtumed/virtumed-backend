@@ -22,16 +22,20 @@ model Admin {
 }
 
 model Doctor {
-  id              String   @id @default(uuid())
+  id              String @id @default(uuid())
   name            String
-  email           String   @unique
-  crm             String   @unique
+  email           String @unique
+  crm             String @unique
   password        String
   confirmpassword String
   image           String
-  role            String   @default("doctor")
-  createAt        DateTime @default(now())
-  updateAt        DateTime @updatedAt
+  role            String @default("doctor")
+
+  roomId String?
+  room   Room?   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 
   @@map("doctor")
 }
@@ -52,16 +56,26 @@ model Organization {
 }
 
 model Patient {
-  id              String   @id @default(uuid())
+  id              String @id @default(uuid())
   name            String
-  cpf             String   @unique
-  email           String   @unique
+  cpf             String @unique
+  email           String @unique
   password        String
   confirmpassword String
   image           String
-  role            String   @default("patient")
-  createAt        DateTime @default(now())
-  updateAt        DateTime @updatedAt
+  role            String @default("patient")
+
+  roomId String?
+  room   Room?   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 
   @@map("patient")
+}
+
+model Room {
+  id        String    @id @default(uuid())
+  doctorId  Doctor[]
+  patientId Patient[]
 }
