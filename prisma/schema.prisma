@@ -8,74 +8,71 @@ datasource db {
 }
 
 model Admin {
-  id              String   @id @default(uuid())
-  name            String
-  email           String   @unique
-  password        String
-  confirmpassword String
-  image           String
-  role            String   @default("admin")
-  createAt        DateTime @default(now())
-  updateAt        DateTime @updatedAt
+  id       String   @id @unique @default(uuid())
+  name     String
+  email    String   @unique
+  password String
+  image    String
+  role     String   @default("admin")
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 
   @@map("admin")
 }
 
-model Doctor {
-  id              String @id @default(uuid())
-  name            String
-  email           String @unique
-  crm             String @unique
-  password        String
-  confirmpassword String
-  image           String
-  role            String @default("doctor")
-
-  roomId String?
-  room   Room?   @relation(fields: [roomId], references: [id], onDelete: Cascade)
-
+model Organization {
+  id       String   @id @unique @default(uuid())
+  name     String
+  email    String   @unique
+  cnpj     String   @unique
+  password String
+  image    String
+  role     String   @default("organization")
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
-
-  @@map("doctor")
-}
-
-model Organization {
-  id              String   @id @default(uuid())
-  name            String
-  email           String   @unique
-  cnpj            String   @unique
-  password        String
-  confirmpassword String
-  image           String
-  role            String   @default("organization")
-  createAt        DateTime @default(now())
-  updateAt        DateTime @updatedAt
 
   @@map("organization")
 }
 
-model Patient {
-  id              String @id @default(uuid())
-  name            String
-  cpf             String @unique
-  email           String @unique
-  password        String
-  confirmpassword String
-  image           String
-  role            String @default("patient")
-
-  roomId String?
-  room   Room?   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+model Doctor {
+  id       String @id @unique @default(uuid())
+  name     String
+  email    String @unique
+  crm      String @unique
+  password String
+  image    String
+  role     String @default("doctor")
 
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
+  room     Room?
+
+  @@map("doctor")
+}
+
+model Patient {
+  id       String @id @unique @default(uuid())
+  name     String
+  cpf      String @unique
+  email    String @unique
+  password String
+  image    String
+  role     String @default("patient")
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  room Room?
 
   @@map("patient")
 }
 
 model Room {
-  id        String    @id @default(uuid())
-  doctorId  Doctor[]
-  patientId Patient[]
+  id String @id @unique @default(uuid())
+
+  DoctorId String @unique
+  doctor   Doctor @relation(fields: [DoctorId], references: [id], onDelete: Cascade)
+
+  PatientId String  @unique
+  patient   Patient @relation(fields: [PatientId], references: [id], onDelete: Cascade)
 }
