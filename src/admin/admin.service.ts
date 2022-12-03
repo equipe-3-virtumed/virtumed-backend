@@ -18,8 +18,7 @@ export class AdminService {
     id: true,
     name: true,
     email: true,
-    password: false,
-    confirmpassword: false,    
+    password: false,       
     image: true,
     role: true,
     createAt: true,
@@ -53,7 +52,8 @@ export class AdminService {
     if (CreateAdminDto.password != CreateAdminDto.confirmpassword) {
       throw new BadRequestException('A senhas digitadas não são iguais.');
     }
-    
+
+    delete CreateAdminDto.confirmpassword
 
     const data: Admin = {
       ...CreateAdminDto,
@@ -65,6 +65,8 @@ export class AdminService {
       .catch(handleError);
     return { ...createdAdmin };
   }
+
+
 
   async update(id: string, updateAdmindto: UpdateAdminDto) {
     await this.findOne(id);

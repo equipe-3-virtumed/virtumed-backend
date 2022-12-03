@@ -4,7 +4,7 @@ export class Doctor {
   email: string;
   crm: string;
   password: string;
-  confirmpassword: string;
+  confirmpassword?: string;
   image: string;
 
   role?: string;

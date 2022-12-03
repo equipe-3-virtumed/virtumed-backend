@@ -19,8 +19,7 @@ export class DoctorService {
     name: true,
     email: true,
     crm: true,
-    password: false,
-    confirmpassword: false,
+    password: false,    
     role: true,
     image: true,
     createAt: true,
@@ -66,10 +65,7 @@ export class DoctorService {
       .catch(handleError);
     return { ...createdDoctor };
   }
-  handleError(error: Error) {
-    console.log(error);
-    return undefined;
-  }
+
 
   async update(id: string, updateDoctorDto: UpdateDoctorDto) {
     await this.findOne(id);

@@ -6,7 +6,7 @@ import { UpdateOrganizationDto } from './dto/update-organization.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags('Organization / Clinic')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('organizationJwt'))
 @ApiBearerAuth()
 @Controller('organization')
 export class OrganizationController {

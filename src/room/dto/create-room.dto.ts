@@ -1,3 +1,8 @@
+import { IsNotEmpty } from 'class-validator';
+
 export class CreateRoomDto {
-    id?: string
+  @IsNotEmpty()
+  DoctorId: string;
+  @IsNotEmpty()
+  PatientId: string;
 }

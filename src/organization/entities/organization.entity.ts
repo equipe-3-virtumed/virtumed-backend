@@ -4,6 +4,7 @@ export class Organization {
   email: string;
   cnpj: string;
   password: string;
+  confirmpassword?: string; 
   image: string;
 
   role?: string;

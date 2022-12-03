@@ -1,21 +1,27 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { create } from 'domain';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LoginResponseDto } from './dto/login-response.dto';
-import { LoginAdminDto, LoginOrganizationDto, LoginDoctorDto, LoginPatientDto } from './dto/login.dto';
+import {
+  LoginAdminDto,
+  LoginOrganizationDto,
+  LoginDoctorDto,
+  LoginPatientDto,
+} from './dto/login.dto';
 
 @Injectable()
 export class AuthAdminService {
   constructor(
     private readonly prime: PrismaService,
-    private readonly jwtService:JwtService,
+    private readonly jwtService: JwtService,
   ) {}
   async adminLogin(loginDto: LoginAdminDto): Promise<LoginResponseDto> {
     const { email, password } = loginDto;
 
     // Checks if the admin record exists, using email to check
-    const admin = await this.prime.admin.findUnique ( {where: { email }})
+    const admin = await this.prime.admin.findUnique({ where: { email } });
 
     if (!admin) {
       throw new UnauthorizedException('Invalid user and/or password');
@@ -28,11 +34,12 @@ export class AuthAdminService {
       throw new UnauthorizedException('Invalid user and/or password');
     }
 
-    delete admin.password;
+    delete admin.password;    
+
 
     return {
       token: this.jwtService.sign({ email }),
-      client: { ...admin},
+      client: { ...admin },
     };
   }
 }
@@ -40,13 +47,17 @@ export class AuthAdminService {
 export class AuthOrganizationService {
   constructor(
     private readonly prime: PrismaService,
-    private readonly jwtService:JwtService,
+    private readonly jwtService: JwtService,
   ) {}
-  async organizationLogin(loginDto: LoginOrganizationDto): Promise<LoginResponseDto> {
+  async organizationLogin(
+    loginDto: LoginOrganizationDto,
+  ): Promise<LoginResponseDto> {
     const { email, password } = loginDto;
 
     // Checks if the organization record exists, using email to check
-    const organization = await this.prime.organization.findUnique ( {where: { email }})
+    const organization = await this.prime.organization.findUnique({
+      where: { email },
+    });
 
     if (!organization) {
       throw new UnauthorizedException('Invalid user and/or password');
@@ -63,7 +74,7 @@ export class AuthOrganizationService {
 
     return {
       token: this.jwtService.sign({ email }),
-      client: { ...organization},
+      client: { ...organization },
     };
   }
 }
@@ -71,13 +82,13 @@ export class AuthOrganizationService {
 export class AuthDoctorService {
   constructor(
     private readonly prime: PrismaService,
-    private readonly jwtService:JwtService,
+    private readonly jwtService: JwtService,
   ) {}
   async doctorLogin(loginDto: LoginDoctorDto): Promise<LoginResponseDto> {
     const { email, password } = loginDto;
 
     // Checks if the doctor record exists, using email to check
-    const doctor = await this.prime.doctor.findUnique ( {where: { email }})
+    const doctor = await this.prime.doctor.findUnique({ where: { email } });
 
     if (!doctor) {
       throw new UnauthorizedException('Invalid user and/or password');
@@ -94,7 +105,7 @@ export class AuthDoctorService {
 
     return {
       token: this.jwtService.sign({ email }),
-      client: { ...doctor},
+      client: { ...doctor },
     };
   }
 }
@@ -103,13 +114,13 @@ export class AuthDoctorService {
 export class AuthPatientService {
   constructor(
     private readonly prime: PrismaService,
-    private readonly jwtService:JwtService,
+    private readonly jwtService: JwtService,
   ) {}
   async patientLogin(loginDto: LoginPatientDto): Promise<LoginResponseDto> {
     const { email, password } = loginDto;
 
     // Checks if the patient record exists, using email to check
-    const patient = await this.prime.patient.findUnique ( {where: { email }})
+    const patient = await this.prime.patient.findUnique({ where: { email } });
 
     if (!patient) {
       throw new UnauthorizedException('Invalid user and/or password');
@@ -126,7 +137,7 @@ export class AuthPatientService {
 
     return {
       token: this.jwtService.sign({ email }),
-      client: { ...patient},
+      client: { ...patient },
     };
   }
 }

@@ -3,7 +3,7 @@ export class Admin {
   name: string;
   email: string;  
   password: string; 
-  confirmpassword: string; 
+  confirmpassword?: string; 
   image: string;
   
   role?: string;
