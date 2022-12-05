@@ -36,6 +36,13 @@ export class CreatePatientDto {
   })
   password: string;
 
+   // CONFIRM PASSWORD
+   @ApiProperty({
+    description: 'Digite novamente a senha anterior',
+    example: '@Abcd1234',
+  })
+  confirmpassword: string;
+
   // IMAGE
   @ApiProperty({
     description: "Link Image patient",

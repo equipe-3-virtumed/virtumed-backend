@@ -18,7 +18,7 @@ export class AdminService {
     id: true,
     name: true,
     email: true,
-    password: false,       
+    password: false,
     image: true,
     role: true,
     createAt: true,
@@ -53,11 +53,11 @@ export class AdminService {
       throw new BadRequestException('A senhas digitadas não são iguais.');
     }
 
-    delete CreateAdminDto.confirmpassword
+    delete CreateAdminDto.confirmpassword;
 
     const data: Admin = {
       ...CreateAdminDto,
-      password: await bcrypt.hash(CreateAdminDto.password, 8)      
+      password: await bcrypt.hash(CreateAdminDto.password, 8),
     };
 
     const createdAdmin = await this.prisma.admin
@@ -66,14 +66,14 @@ export class AdminService {
     return { ...createdAdmin };
   }
 
-
-
+  // Update Admin
   async update(id: string, updateAdmindto: UpdateAdminDto) {
     await this.findOne(id);
     const data: any = { ...updateAdmindto };
     return this.prisma.admin.update({ data, where: { id } });
   }
 
+  // Remove Admin
   async remove(id: string) {
     await this.findOne(id);
     await this.prisma.admin.delete({ where: { id } });

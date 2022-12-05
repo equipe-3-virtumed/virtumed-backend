@@ -66,13 +66,14 @@ export class DoctorService {
     return { ...createdDoctor };
   }
 
-
+// Update Doctor
   async update(id: string, updateDoctorDto: UpdateDoctorDto) {
     await this.findOne(id);
     const data: any = { ...updateDoctorDto };
     return this.prisma.doctor.update({ data, where: { id } });
   }
 
+  // Remove Doctor
   async remove(id: string) {
     await this.findOne(id);
     await this.prisma.doctor.delete({ where: { id } });

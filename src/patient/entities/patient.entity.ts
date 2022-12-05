@@ -1,7 +1,7 @@
 export class Patient {
   id?: string;
   name: string;
-  cpf?: string;
+  cpf: string;
   email: string;
   password: string;
   confirmpassword?: string; 

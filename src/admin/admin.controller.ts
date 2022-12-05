@@ -52,7 +52,7 @@ export class AdminController {
   @ApiOperation({
     summary: 'Edit Admin by id',
   })
-  @Patch(":id")
+  @Patch(":id")  
   update(@Param("id") id: string, @Body() updateAdminDto: UpdateAdminDto) {
     return this.adminService.update(id, updateAdminDto);
   }
