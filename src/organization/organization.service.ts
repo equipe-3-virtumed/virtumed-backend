@@ -25,12 +25,14 @@ export class OrganizationService {
     createAt: true,
     updateAt: true,
   };
+
   // Find all organizations
   findAll(): Promise<Organization[]> {
     return this.prisma.organization.findMany({
       select: this.organizationSelect,
     });
   }
+
   // Function to check ID
   async findById(id: string): Promise<Organization> {
     const record = this.prisma.organization.findUnique({

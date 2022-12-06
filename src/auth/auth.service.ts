@@ -109,7 +109,6 @@ export class AuthDoctorService {
     };
   }
 }
-
 @Injectable()
 export class AuthPatientService {
   constructor(
