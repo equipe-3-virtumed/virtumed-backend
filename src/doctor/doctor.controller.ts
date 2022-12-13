@@ -16,7 +16,7 @@ import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { Doctor } from './entities/doctor.entity';
 
 @ApiTags('Doctor')
-@UseGuards(AuthGuard('doctorJwt'))
+@UseGuards(AuthGuard('Jwt'))
 @ApiBearerAuth()
 @Controller('doctor')
 export class DoctorController {
