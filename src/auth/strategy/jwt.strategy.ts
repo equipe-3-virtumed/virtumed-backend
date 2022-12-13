@@ -14,20 +14,36 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'Jwt') {
   }
 
   async validate(payload: { email: string }) {
+    let user = null;
+    const userSelect = [];
 
-    const userSelect = (this.prisma.admin)
-    const user = await userSelect.findUnique({
+    user = await this.prisma.patient.findUnique({
       where: { email: payload.email },
     });
-   
-    if (!user) {
+    if (user != null) userSelect.push(user);
+
+    user = await this.prisma.organization.findUnique({
+      where: { email: payload.email },
+    });
+    if (user != null) userSelect.push(user);
+
+    user = await this.prisma.doctor.findUnique({
+      where: { email: payload.email },
+    });
+    if (user != null) userSelect.push(user);
+
+    user = await this.prisma.admin.findUnique({
+      where: { email: payload.email },
+    });
+    if (user != null) userSelect.push(user);
+
+    if (!userSelect) {
       throw new UnauthorizedException(
         'User does not exist or is not authenticated',
       );
     }
-    delete user.password;
+    delete userSelect[0].password;
 
-    
-    return user
+    return userSelect[0];
   }
 }
