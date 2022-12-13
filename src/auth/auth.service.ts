@@ -1,142 +1,60 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Admin, Doctor, Organization, Patient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { create } from 'domain';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LoginResponseDto } from './dto/login-response.dto';
-import {
-  LoginAdminDto,
-  LoginOrganizationDto,
-  LoginDoctorDto,
-  LoginPatientDto,
-} from './dto/login.dto';
+import { LoginDto } from './dto/login.dto';
+import { Module } from '@nestjs/common';
 
 @Injectable()
-export class AuthAdminService {
+export class AuthService {
   constructor(
-    private readonly prime: PrismaService,
-    private readonly jwtService: JwtService,
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService     
   ) {}
-  async adminLogin(loginDto: LoginAdminDto): Promise<LoginResponseDto> {
+
+  
+  async Login(loginDto: LoginDto): Promise<LoginResponseDto> {
     const { email, password } = loginDto;
 
-    // Checks if the admin record exists, using email to check
-    const admin = await this.prime.admin.findUnique({ where: { email } });
+    // Checks if the user record exists, using email to check
+    let user = null
+    const userSelect = []
+    
+    user = await this.prisma.patient.findUnique({ where: { email } });
+    if (user != null) userSelect.push(user);
 
-    if (!admin) {
+    user = await this.prisma.organization.findUnique({ where: { email } });
+    if (user != null) userSelect.push(user);
+
+    user = await this.prisma.doctor.findUnique({ where: { email } });
+    if (user != null) userSelect.push(user);
+
+    user = await this.prisma.admin.findUnique({ where: { email } });
+    if (user != null) userSelect.push(user);
+    
+  
+
+
+    console.log(userSelect);
+    if (!userSelect) {
       throw new UnauthorizedException('Invalid user and/or password');
     }
 
     // check if the login information is corret
-    const isHashValid = await bcrypt.compare(password, admin.password);
+    const isHashValid = await bcrypt.compare(password, userSelect[0].password);
 
     if (!isHashValid) {
       throw new UnauthorizedException('Invalid user and/or password');
     }
 
-    delete admin.password;    
-
-
-    return {
-      token: this.jwtService.sign({ email }),
-      client: { ...admin },
-    };
-  }
-}
-@Injectable()
-export class AuthOrganizationService {
-  constructor(
-    private readonly prime: PrismaService,
-    private readonly jwtService: JwtService,
-  ) {}
-  async organizationLogin(
-    loginDto: LoginOrganizationDto,
-  ): Promise<LoginResponseDto> {
-    const { email, password } = loginDto;
-
-    // Checks if the organization record exists, using email to check
-    const organization = await this.prime.organization.findUnique({
-      where: { email },
-    });
-
-    if (!organization) {
-      throw new UnauthorizedException('Invalid user and/or password');
-    }
-
-    // check if the login information is corret
-    const isHashValid = await bcrypt.compare(password, organization.password);
-
-    if (!isHashValid) {
-      throw new UnauthorizedException('Invalid user and/or password');
-    }
-
-    delete organization.password;
+    delete userSelect[0].password;
 
     return {
       token: this.jwtService.sign({ email }),
-      client: { ...organization },
-    };
-  }
-}
-@Injectable()
-export class AuthDoctorService {
-  constructor(
-    private readonly prime: PrismaService,
-    private readonly jwtService: JwtService,
-  ) {}
-  async doctorLogin(loginDto: LoginDoctorDto): Promise<LoginResponseDto> {
-    const { email, password } = loginDto;
-
-    // Checks if the doctor record exists, using email to check
-    const doctor = await this.prime.doctor.findUnique({ where: { email } });
-
-    if (!doctor) {
-      throw new UnauthorizedException('Invalid user and/or password');
-    }
-
-    // check if the login information is corret
-    const isHashValid = await bcrypt.compare(password, doctor.password);
-
-    if (!isHashValid) {
-      throw new UnauthorizedException('Invalid user and/or password');
-    }
-
-    delete doctor.password;
-
-    return {
-      token: this.jwtService.sign({ email }),
-      client: { ...doctor },
-    };
-  }
-}
-@Injectable()
-export class AuthPatientService {
-  constructor(
-    private readonly prime: PrismaService,
-    private readonly jwtService: JwtService,
-  ) {}
-  async patientLogin(loginDto: LoginPatientDto): Promise<LoginResponseDto> {
-    const { email, password } = loginDto;
-
-    // Checks if the patient record exists, using email to check
-    const patient = await this.prime.patient.findUnique({ where: { email } });
-
-    if (!patient) {
-      throw new UnauthorizedException('Invalid user and/or password');
-    }
-
-    // check if the login information is corret
-    const isHashValid = await bcrypt.compare(password, patient.password);
-
-    if (!isHashValid) {
-      throw new UnauthorizedException('Invalid user and/or password');
-    }
-
-    delete patient.password;
-
-    return {
-      token: this.jwtService.sign({ email }),
-      client: { ...patient },
+      client: { ...userSelect[0] },
     };
   }
 }

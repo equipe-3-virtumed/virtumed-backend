@@ -19,13 +19,13 @@ async function bootstrap() {
     .setVersion('1.0.3')
     .addBearerAuth()
     .addTag('Status')
-    .addTag('AdminAuth')
+    .addTag('Auth')
     .addTag('Admin')
-    .addTag('OrganizationAuth')
+    
     .addTag('Organization / Clinic')
-    .addTag('DoctorAuth')
+    
     .addTag('Doctor')
-    .addTag('PatientAuth')
+  
     .addTag('Patient')
     .addTag('Room')
     .build();
