@@ -18,7 +18,7 @@ import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { Admin } from "./entities/admin.entity";
 
 @ApiTags("Admin")
-@UseGuards(AuthGuard('adminJwt'))
+@UseGuards(AuthGuard('Jwt'))
 @ApiBearerAuth()
 @Controller("admin")
 export class AdminController {
@@ -52,7 +52,7 @@ export class AdminController {
   @ApiOperation({
     summary: 'Edit Admin by id',
   })
-  @Patch(":id")
+  @Patch(":id")  
   update(@Param("id") id: string, @Body() updateAdminDto: UpdateAdminDto) {
     return this.adminService.update(id, updateAdminDto);
   }

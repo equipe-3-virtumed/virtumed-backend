@@ -7,62 +7,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output = "../entity_diagram.pdf"
-}
-
 model Admin {
-  id       String @id @default(uuid())
+  id       String   @id @unique @default(uuid())
   name     String
-  email    String @unique
+  email    String   @unique
   password String
   image    String
-  role     String @default("admin")
-
+  role     String   @default("admin")
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
 
   @@map("admin")
 }
 
-model Doctor {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  crm      String @unique
-  // CPF
-  // data de nascimento
-  // especialidade
-  password String
-  image    String
-  role     String @default("doctor")
-
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
-
-
-  @@map("doctor")
-}
-
 model Organization {
-  id       String @id @default(uuid())
+  id       String   @id @unique @default(uuid())
   name     String
-  email    String @unique
-  cnpj     String @unique
+  email    String   @unique
+  cnpj     String   @unique
   password String
   image    String
-  role     String @default("organization")
-  // criar medico
-
+  role     String   @default("organization")
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
 
   @@map("organization")
 }
 
+model Doctor {
+  id       String @id @unique @default(uuid())
+  name     String
+  email    String @unique
+  crm      String @unique
+  password String
+  image    String
+  role     String @default("doctor")
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  room     Room?
+
+  @@map("doctor")
+}
+
 model Patient {
-  id       String @id @default(uuid())
+  id       String @id @unique @default(uuid())
   name     String
   cpf      String @unique
   email    String @unique
@@ -73,25 +62,17 @@ model Patient {
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
 
+  room Room?
+
   @@map("patient")
 }
 
-// model Room {
-//   id String @default(uuid())
+model Room {
+  id String @id @unique @default(uuid())
 
-//   Doctor   Doctor @relation(fields: [DoctorId], references: [id])
-//   DoctorId String @map("doctor_id")
+  DoctorId String @unique
+  doctor   Doctor @relation(fields: [DoctorId], references: [id], onDelete: Cascade)
 
-//   Patient   Patient @relation(fields: [PatientId], references: [id])
-//   PatientId String  @map("patient_id")
-
-//   createdAt DateTime @default(now()) @map("created_at")
-//   updatedAt DateTime @updatedAt @map("udpate_at")
-
-//   @@map("room")
-// }
-
-// model WorkStation {
-//   id String @default(uuid())
-
-// }
+  PatientId String  @unique
+  patient   Patient @relation(fields: [PatientId], references: [id], onDelete: Cascade)
+}

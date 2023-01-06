@@ -10,13 +10,16 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Admin } from 'src/admin/entities/admin.entity';
-import { AuthService } from './admin-auth.service';
-import { LoginResponseDto } from '../utils/dto/login-response.dto';
-import { LoginDto } from '../utils/dto/login.dto';
-import { LoggedUser } from './logged-admin.decorator';
+import { AuthService  } from './auth.service';
+import { LoginResponseDto } from './dto/login-response.dto';
+import { LoginDto } from './dto/login.dto';
+import { LoggedUser } from './dto/logged.decorator';
+import { Organization } from 'src/organization/entities/organization.entity';
+import { Doctor } from 'src/doctor/entities/doctor.entity';
+import { Patient } from 'src/patient/entities/patient.entity';
 
-@ApiTags('AdminAuth')
-@Controller('AdminAuth')
+@ApiTags('Auth')
+@Controller('Auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -26,7 +29,7 @@ export class AuthController {
     summary: 'Log in, receiving an authentication token',
   })
   login(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
-    return this.authService.adminLogin(loginDto);
+    return this.authService.Login(loginDto);
   }
 
   @Get()
@@ -35,7 +38,7 @@ export class AuthController {
     summary: 'Returns the currently authenticated user',
   })
   @ApiBearerAuth()
-  profile(@LoggedUser() admin: Admin) {
-    return admin;
+  profile(@LoggedUser() user: Admin | Doctor | Organization | Patient ) {
+    return user;
   }
 }

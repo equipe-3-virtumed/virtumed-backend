@@ -1,12 +1,13 @@
 export class Patient {
-  id?: String;
-  name: String;
-  cpf: String;
-  email: String;
-  password: String;
-  image: String;
+  id?: string;
+  name: string;
+  cpf: string;
+  email: string;
+  password: string;
+  confirmpassword?: string; 
+  image: string;
 
-  role?: String;
+  role?: string;
   createAt?: Date;
   updateAt?: Date;
 }

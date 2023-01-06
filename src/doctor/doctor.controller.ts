@@ -1,40 +1,49 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DoctorService } from './doctor.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
+import { Doctor } from './entities/doctor.entity';
 
 @ApiTags('Doctor')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('Jwt'))
 @ApiBearerAuth()
 @Controller('doctor')
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
   @ApiOperation({
-    summary: "Create Doctor",
+    summary: 'Create Doctor',
   })
-
   @Post()
-  create(@Body() createDoctorDto: CreateDoctorDto) {
-    return this.doctorService.create(createDoctorDto);
+  async create(@Body() createDoctorDto: CreateDoctorDto) {
+    const register = await this.doctorService.create(createDoctorDto)
+    return {...register}
   }
 
   @ApiOperation({
-    summary: 'View all Doctor`s'
+    summary: 'View all Doctor`s',
   })
-
   @Get()
-  findAll() {
+  findAll(): Promise<Doctor[]> {
     return this.doctorService.findAll();
   }
 
   @ApiOperation({
-    summary: 'View Doctor by id'
+    summary: 'View Doctor by id',
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<Doctor> {
     return this.doctorService.findOne(id);
   }
 

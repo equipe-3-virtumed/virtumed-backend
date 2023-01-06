@@ -42,14 +42,16 @@ export class CreateAdminDto {
     description: 'Digite novamente a senha anterior',
     example: '@Abcd1234',
   })
-  confirmPassword: string;
+  confirmpassword: string;
 
   // IMAGE
-  @IsUrl()
   @ApiProperty({
-    description: 'Link Image Admin',
-    example: 'url',
+    description: "Imagem ou URL da imagem",
+    example:
+      "https://crbm5.gov.br/novosite/wp-content/uploads/2021/04/HCPA-site-1024x569.png",
   })
+  @IsUrl()
+  @IsString()
   image: string;
 
   // ROLE

@@ -20,11 +20,12 @@ export class AdminService {
     email: true,
     password: false,
     image: true,
+    role: true,
     createAt: true,
     updateAt: true,
   };
 
-  // Find all admin
+  // Find all admins
   findAll(): Promise<Admin[]> {
     return this.prisma.admin.findMany({ select: this.adminSelect });
   }
@@ -41,18 +42,18 @@ export class AdminService {
     return record;
   }
 
-  // Find user By ID
+  // Find Admin By ID
   async findOne(id: string): Promise<Admin> {
     return this.findById(id);
   }
 
   // Create Admin
   async create(CreateAdminDto: CreateAdminDto): Promise<Admin> {
-    if (CreateAdminDto.password != CreateAdminDto.confirmPassword) {
+    if (CreateAdminDto.password != CreateAdminDto.confirmpassword) {
       throw new BadRequestException('A senhas digitadas não são iguais.');
     }
 
-    delete CreateAdminDto.confirmPassword;
+    delete CreateAdminDto.confirmpassword;
 
     const data: Admin = {
       ...CreateAdminDto,
@@ -65,12 +66,14 @@ export class AdminService {
     return { ...createdAdmin };
   }
 
+  // Update Admin
   async update(id: string, updateAdmindto: UpdateAdminDto) {
     await this.findOne(id);
     const data: any = { ...updateAdmindto };
     return this.prisma.admin.update({ data, where: { id } });
   }
 
+  // Remove Admin
   async remove(id: string) {
     await this.findOne(id);
     await this.prisma.admin.delete({ where: { id } });

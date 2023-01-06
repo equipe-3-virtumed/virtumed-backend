@@ -46,6 +46,13 @@ export class CreateOrganizationDto {
   @IsString()
   image: string;
 
+    // CONFIRM PASSWORD
+    @ApiProperty({
+      description: 'Digite novamente a senha anterior',
+      example: '@Abcd1234',
+    })
+    confirmpassword: string;
+
   // ROLE
   @ApiProperty({
     description: "Função no sistema",
