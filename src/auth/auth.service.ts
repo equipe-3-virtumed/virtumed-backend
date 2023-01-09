@@ -14,8 +14,6 @@ export class AuthService {
 
   async Login(loginDto: LoginDto): Promise<LoginResponseDto> {
     const { email, password } = loginDto;
-
-    // Checks if the user record exists, using email to check
     let user = null;
 
     if (!user)
@@ -30,11 +28,6 @@ export class AuthService {
     if (!user)
       user = await this.prisma.admin.findUnique({ where: { email } });
 
-    console.log(
-      '🚀 ~ file: auth.service.ts:20 ~ AuthService ~ Login ~ user',
-      user,
-    );
-
     if (user) {
       const isHashValid = await bcrypt.compare(password, user.password);
 
@@ -44,8 +37,10 @@ export class AuthService {
 
       delete user.password;
 
+      const userRole = user.role;
+
       return {
-        token: this.jwtService.sign({ email }),
+        token: this.jwtService.sign({ email, userRole }),
         user: { ...user },
       };
     }
