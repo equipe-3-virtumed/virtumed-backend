@@ -18,7 +18,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Patient } from './entities/patient.entity';
 
 @ApiTags('Patient')
-@UseGuards(AuthGuard('Jwt'))
+@UseGuards(AuthGuard('Global'))
 @ApiBearerAuth()
 @Controller('patient')
 export class PatientController {

@@ -5,7 +5,7 @@ export class LoginDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Login',
+    description: 'User name',
     example: 'admin@virtumed.com',
   })
   email: string;
@@ -13,8 +13,8 @@ export class LoginDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'user password for authentication',
-    example: 'AB@123cd',
+    description: 'User password for authentication',
+    example: '@Abcd1234',
   })
   password: string;
 }
