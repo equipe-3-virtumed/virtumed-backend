@@ -1,41 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { getTwilioToken } from './getToken.twilio.service';
 
 @Injectable()
 export class RoomService {
+  constructor(private prisma: PrismaService) {}
+
   create(createRoomDto: CreateRoomDto) {
     return 'This action schedule a new room';
   }
 
-  findOne(id: string) {
-    const AccessToken = require('twilio').jwt.AccessToken;
-    const VideoGrant = AccessToken.VideoGrant;
+  findOne(userId: string, roomId: string) {
+    const room = this.prisma.room.findUniqueOrThrow({
+      where: { id: roomId },
+    }); // continue... 
+  }
 
-    // Used when generating any kind of tokens
-    // To set up environmental variables, see http://twil.io/secure
-    const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
-    const twilioApiKey = process.env.TWILIO_API_KEY;
-    const twilioApiSecret = process.env.TWILIO_API_SECRET;
+  connect(userId: string, roomId: string) {
+    return getTwilioToken(userId, roomId);
+  }
 
-    // Create Video Grant
-    const videoGrant = new VideoGrant({
-      room: 'cool room',
-    });
-
-    // Create an access token which we will sign and return to the client,
-    // containing the grant we just created
-    const token = new AccessToken(
-      twilioAccountSid,
-      twilioApiKey,
-      twilioApiSecret,
-      {identity: id}
-    );
-    token.addGrant(videoGrant);
-
-    // Serialize the token to a JWT string
-    console.log(token.toJwt());
-    return token.toJwt();
+  update(userId: string, roomId: UpdateRoomDto) {
+    return 'This action updates a room';
   }
 
   remove(id: string) {
