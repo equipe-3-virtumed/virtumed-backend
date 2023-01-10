@@ -18,7 +18,7 @@ import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { Admin } from "./entities/admin.entity";
 
 @ApiTags("Admin")
-@UseGuards(AuthGuard('Global'))
+@UseGuards(AuthGuard('Admin'))
 @ApiBearerAuth()
 @Controller("admin")
 export class AdminController {

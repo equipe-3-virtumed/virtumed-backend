@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class GlobalStrategy extends PassportStrategy(Strategy, 'Global') {
+export class DoctorStrategy extends PassportStrategy(Strategy, 'Doctor') {
   constructor(private readonly prisma: PrismaService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -16,26 +16,8 @@ export class GlobalStrategy extends PassportStrategy(Strategy, 'Global') {
   async validate(payload: { email: string; userRole: string }) {
     let user = null;
 
-    if (payload.userRole === 'patient') {
-      user = await this.prisma.patient.findUniqueOrThrow({
-        where: { email: payload.email },
-      });
-    }
-
-    if (payload.userRole === 'organization') {
-      user = await this.prisma.organization.findUniqueOrThrow({
-        where: { email: payload.email },
-      });
-    }
-
     if (payload.userRole === 'doctor') {
-      user = await this.prisma.doctor.findUniqueOrThrow({
-        where: { email: payload.email },
-      });
-    }
-
-    if (payload.userRole === 'admin') {
-      user = await this.prisma.admin.findUniqueOrThrow({
+      user = await this.prisma.doctor.findUnique({
         where: { email: payload.email },
       });
     }
@@ -44,7 +26,5 @@ export class GlobalStrategy extends PassportStrategy(Strategy, 'Global') {
       delete user.password;
       return user;
     }
-
-    throw new UnauthorizedException('Please login');
   }
 }
