@@ -52,12 +52,4 @@ export class CreateOrganizationDto {
     example: '@Abcd1234',
   })
   confirmpassword: string;
-
-  // ROLE
-  @ApiProperty({
-    description: 'Função no sistema',
-    example: 'organization',
-  })
-  @IsString()
-  role: string;
 }

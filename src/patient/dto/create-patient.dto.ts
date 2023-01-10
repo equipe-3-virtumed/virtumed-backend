@@ -49,12 +49,4 @@ export class CreatePatientDto {
     example: 'url',
   })
   image: string;
-
-  // ROLE
-  @ApiProperty({
-    description: 'Função no sistema',
-    example: 'patient',
-  })
-  @IsString()
-  role: string;
 }

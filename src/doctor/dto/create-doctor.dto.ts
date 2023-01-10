@@ -51,12 +51,4 @@ export class CreateDoctorDto {
   })
   @IsString()
   image: string;
-
-  // ROLE
-  @ApiProperty({
-    description: 'Função no sistema',
-    example: 'doctor',
-  })
-  @IsString()
-  role: string;
 }

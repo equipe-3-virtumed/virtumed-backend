@@ -27,8 +27,8 @@ export class DoctorController {
   })
   @Post()
   async create(@Body() createDoctorDto: CreateDoctorDto) {
-    const register = await this.doctorService.create(createDoctorDto)
-    return {...register}
+    const register = await this.doctorService.create(createDoctorDto);
+    return { ...register };
   }
 
   @UseGuards(AuthGuard('Global'))
