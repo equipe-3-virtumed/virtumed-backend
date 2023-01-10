@@ -53,7 +53,9 @@ export class OrganizationService {
   }
 
   // Create Organization
-  async create(CreateOrganizationDto: CreateOrganizationDto): Promise<Organization> {
+  async create(
+    CreateOrganizationDto: CreateOrganizationDto,
+  ): Promise<Organization> {
     if (
       CreateOrganizationDto.password != CreateOrganizationDto.confirmpassword
     ) {

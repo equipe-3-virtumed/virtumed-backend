@@ -9,7 +9,6 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RoomModule } from './room/room.module';
 
-
 @Module({
   imports: [
     PrismaModule,
