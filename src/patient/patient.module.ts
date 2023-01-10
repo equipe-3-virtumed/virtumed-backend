@@ -4,8 +4,8 @@ import { PatientController } from './patient.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports : [PrismaModule],
+  imports: [PrismaModule],
   controllers: [PatientController],
-  providers: [PatientService]
+  providers: [PatientService],
 })
 export class PatientModule {}

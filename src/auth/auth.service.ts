@@ -32,7 +32,7 @@ export class AuthService {
       const isHashValid = await bcrypt.compare(password, user.password);
 
       if (!isHashValid) {
-        throw new UnauthorizedException('Invalid user and/or password PASS');
+        throw new UnauthorizedException('Invalid user and/or password');
       }
 
       delete user.password;
