@@ -15,16 +15,16 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Backend Virtumed')
-    .setDescription('Documentação de rotas para cadastro, autorização e acesso')
+    .setDescription('General routes documentation')
     .setVersion('1.0.3')
     .addBearerAuth()
-    .addTag('Room')
-    .addTag('Auth')
-    .addTag('Patient')
-    .addTag('Doctor')
-    .addTag('Organization / Clinic')
-    .addTag('Admin')
     .addTag('Status')
+    .addTag('Auth')
+    .addTag('Admin')
+    .addTag('Organization / Clinic')
+    .addTag('Doctor')
+    .addTag('Patient')
+    .addTag('Room')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);

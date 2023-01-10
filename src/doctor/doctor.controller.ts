@@ -16,14 +16,14 @@ import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { Doctor } from './entities/doctor.entity';
 
 @ApiTags('Doctor')
-@UseGuards(AuthGuard('Global'))
 @ApiBearerAuth()
 @Controller('doctor')
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
+  @UseGuards(AuthGuard(['Admin', 'Organization']))
   @ApiOperation({
-    summary: 'Create Doctor',
+    summary: 'Create Doctor - Admin / Organization Auth',
   })
   @Post()
   async create(@Body() createDoctorDto: CreateDoctorDto) {
@@ -31,32 +31,36 @@ export class DoctorController {
     return {...register}
   }
 
+  @UseGuards(AuthGuard('Global'))
   @ApiOperation({
-    summary: 'View all Doctor`s',
+    summary: 'View all Doctor`s - Global Auth',
   })
   @Get()
   findAll(): Promise<Doctor[]> {
     return this.doctorService.findAll();
   }
 
+  @UseGuards(AuthGuard('Global'))
   @ApiOperation({
-    summary: 'View Doctor by id',
+    summary: 'View Doctor by id - Global Auth',
   })
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Doctor> {
     return this.doctorService.findOne(id);
   }
 
+  @UseGuards(AuthGuard(['Admin', 'Organization']))
   @ApiOperation({
-    summary: 'Edit Doctor by id',
+    summary: 'Edit Doctor by id - Admin / Organization Auth',
   })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctorDto) {
     return this.doctorService.update(id, updateDoctorDto);
   }
 
+  @UseGuards(AuthGuard(['Admin', 'Organization']))
   @ApiOperation({
-    summary: 'Delete Doctor by id',
+    summary: 'Delete Doctor by id - Admin / Organization Auth',
   })
   @Delete(':id')
   remove(@Param('id') id: string) {

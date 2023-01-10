@@ -18,14 +18,14 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Organization } from './entities/organization.entity';
 
 @ApiTags('Organization / Clinic')
-@UseGuards(AuthGuard('Global'))
 @ApiBearerAuth()
 @Controller('organization')
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
+  @UseGuards(AuthGuard(['Admin']))
   @ApiOperation({
-    summary: 'Create Organization',
+    summary: 'Create Organization - Only Admins can create an Organization',
   })
   @Post()
   create(
@@ -35,24 +35,27 @@ export class OrganizationController {
     return { ...register };
   }
 
+  @UseGuards(AuthGuard('Global'))
   @ApiOperation({
-    summary: 'View all Organization`s',
+    summary: 'View all Organization`s - Global Auth',
   })
   @Get()
   findAll(): Promise<Organization[]> {
     return this.organizationService.findAll();
   }
 
+  @UseGuards(AuthGuard('Global'))
   @ApiOperation({
-    summary: 'View Organization by id',
+    summary: 'View Organization by id - Global Auth',
   })
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Organization> {
     return this.organizationService.findOne(id);
   }
 
+  @UseGuards(AuthGuard(['Admin', 'Organization']))
   @ApiOperation({
-    summary: 'Edit Organization by id',
+    summary: 'Edit Organization by id - Admin / Organization Auth',
   })
   @Patch(':id')
   update(
@@ -62,8 +65,9 @@ export class OrganizationController {
     return this.organizationService.update(id, updateOrganizationDto);
   }
 
+    @UseGuards(AuthGuard(['Admin', 'Organization']))
   @ApiOperation({
-    summary: 'Delete Organization by id',
+    summary: 'Delete Organization by id - Admin / Organization Auth',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
