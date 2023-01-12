@@ -11,7 +11,6 @@ import {
 import { RoomService } from './room.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
-import { ApiTags } from '@nestjs/swagger';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from "@nestjs/passport";
 
@@ -41,10 +40,6 @@ export class RoomController {
   @Patch(':roomId')
   update(@Param('roomId') roomId: UpdateRoomDto, @Body() userId: string) {
     return this.roomService.update(userId, roomId)
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.roomService.findOne(id);
   }
 
   @Delete(':roomId')
