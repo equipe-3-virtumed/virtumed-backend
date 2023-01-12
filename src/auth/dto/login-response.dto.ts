@@ -14,5 +14,5 @@ export class LoginResponseDto {
   @ApiProperty({
     description: 'Authenticated client data',
   })
-  client: Admin | Doctor | Organization | Patient;
+  user: Admin | Doctor | Organization | Patient;
 }

@@ -4,7 +4,7 @@ export class Patient {
   cpf: string;
   email: string;
   password: string;
-  confirmpassword?: string; 
+  confirmpassword?: string;
   image: string;
 
   role?: string;

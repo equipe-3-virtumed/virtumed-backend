@@ -18,8 +18,6 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Patient } from './entities/patient.entity';
 
 @ApiTags('Patient')
-@UseGuards(AuthGuard('Jwt'))
-@ApiBearerAuth()
 @Controller('patient')
 export class PatientController {
   constructor(private readonly patientService: PatientService) {}
@@ -33,32 +31,40 @@ export class PatientController {
     return { ...register };
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard(['Admin', 'Organization']))
   @ApiOperation({
-    summary: 'View all Patient`s',
+    summary: 'View all Patient`s - Admin / Organization Auth',
   })
   @Get()
   findAll(): Promise<Patient[]> {
     return this.patientService.findAll();
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('Global'))
   @ApiOperation({
-    summary: 'View Patient by id',
+    summary: 'View Patient by id - Global Auth',
   })
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Patient> {
     return this.patientService.findOne(id);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('Global'))
   @ApiOperation({
-    summary: 'Edit Patient by id',
+    summary: 'Edit Patient by id - Global Auth',
   })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
     return this.patientService.update(id, updatePatientDto);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('Global'))
   @ApiOperation({
-    summary: 'Delete Patient by id',
+    summary: 'Delete Patient by id - Global Auth',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')

@@ -13,13 +13,13 @@ import { Admin } from 'src/admin/entities/admin.entity';
 import { AuthService  } from './auth.service';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { LoginDto } from './dto/login.dto';
-import { LoggedUser } from './dto/logged.decorator';
+import { LoggedUser } from './strategies/logged.decorator';
 import { Organization } from 'src/organization/entities/organization.entity';
 import { Doctor } from 'src/doctor/entities/doctor.entity';
 import { Patient } from 'src/patient/entities/patient.entity';
 
 @ApiTags('Auth')
-@Controller('Auth')
+@Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -32,7 +32,7 @@ export class AuthController {
     return this.authService.Login(loginDto);
   }
 
-  @Get()
+  @Get('auth')
   @UseGuards(AuthGuard())
   @ApiOperation({
     summary: 'Returns the currently authenticated user',
