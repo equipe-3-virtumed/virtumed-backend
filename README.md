@@ -34,13 +34,13 @@ $ npm run start:prod
 
 Open Swagger at http://localhost:3333/docs
 
-## Adding Admin
+## Adding an Admin to Local Database
 
 The Admin's Routes are protected by AuthGuards, so you have to:
 
 - Open `admin.controller`.
 - Comment `@UseGuards(AuthGuard('Admin'))` and `@ApiBearerAuth()` lines in  in order to free admin routes.
-- Open http://localhost:3333/docs and add an Admin to your local database via Swagger.
+- Open http://localhost:3333/docs and add an Admin via Swagger.
 - Close the admin routes.
 - Have fun!
 
@@ -53,11 +53,12 @@ The Admin's Routes are protected by AuthGuards, so you have to:
 - Nubia Dias - [LinkedIn](https://www.linkedin.com/in/dev-nubia-dias/) - [GitHub](https://github.com/nubiapdias)
 - Wirlley Melo - [LinkedIn](https://www.linkedin.com/in/wirlley/) - [GitHub](https://github.com/wirlleym)
 
+
 ## License
 
 This project and Nest is [MIT licensed](LICENSE).
 
-## Support Nest
+## NestJS stats
 
 <p align="center">
 <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
