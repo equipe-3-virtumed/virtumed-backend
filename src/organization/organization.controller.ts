@@ -28,10 +28,10 @@ export class OrganizationController {
     summary: 'Create Organization - Only Admins can create an Organization',
   })
   @Post()
-  create(
+  async create(
     @Body() createOrganizationDto: CreateOrganizationDto,
   ): Promise<Organization> {
-    const register = this.organizationService.create(createOrganizationDto);
+    const register = await this.organizationService.create(createOrganizationDto);
     return { ...register };
   }
 

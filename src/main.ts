@@ -18,13 +18,13 @@ async function bootstrap() {
     .setDescription('General routes documentation')
     .setVersion('1.0.3')
     .addBearerAuth()
-    .addTag('Status')
     .addTag('Auth')
+    .addTag('Room')
     .addTag('Admin')
     .addTag('Organization / Clinic')
     .addTag('Doctor')
     .addTag('Patient')
-    .addTag('Room')
+    .addTag('Status')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);

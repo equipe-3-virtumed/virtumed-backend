@@ -10,7 +10,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Admin } from 'src/admin/entities/admin.entity';
-import { AuthService  } from './auth.service';
+import { AuthService } from './auth.service';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { LoggedUser } from './strategies/logged.decorator';
@@ -23,7 +23,7 @@ import { Patient } from 'src/patient/entities/patient.entity';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('login')  
+  @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Log in, receiving an authentication token',
@@ -33,12 +33,12 @@ export class AuthController {
   }
 
   @Get('auth')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard('Global'))
   @ApiOperation({
     summary: 'Returns the currently authenticated user',
   })
   @ApiBearerAuth()
-  profile(@LoggedUser() user: Admin | Doctor | Organization | Patient ) {
+  profile(@LoggedUser() user: Admin | Doctor | Organization | Patient) {
     return user;
   }
 }

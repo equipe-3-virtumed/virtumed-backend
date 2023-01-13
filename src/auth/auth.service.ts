@@ -35,6 +35,7 @@ export class AuthService {
         throw new UnauthorizedException('Invalid user and/or password');
       }
 
+      delete user.cpf;
       delete user.password;
 
       const userRole = user.role;

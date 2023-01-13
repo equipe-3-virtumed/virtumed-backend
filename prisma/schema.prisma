@@ -75,4 +75,6 @@ model Room {
 
   PatientId String  @unique
   patient   Patient @relation(fields: [PatientId], references: [id], onDelete: Cascade)
+
+  appointmentTime DateTime
 }

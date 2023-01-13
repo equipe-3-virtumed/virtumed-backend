@@ -15,7 +15,7 @@ export class GlobalStrategy extends PassportStrategy(Strategy, 'Global') {
 
   async validate(payload: { email: string; userRole: string }) {
     let user = null;
-
+    
     if (payload.userRole === 'patient') {
       user = await this.prisma.patient.findUniqueOrThrow({
         where: { email: payload.email },
@@ -39,8 +39,9 @@ export class GlobalStrategy extends PassportStrategy(Strategy, 'Global') {
         where: { email: payload.email },
       });
     }
-
+    
     if (user) {
+      delete user.cpf;
       delete user.password;
       return user;
     }
