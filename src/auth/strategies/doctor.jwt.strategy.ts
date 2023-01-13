@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -17,7 +17,7 @@ export class DoctorStrategy extends PassportStrategy(Strategy, 'Doctor') {
     let user = null;
 
     if (payload.userRole === 'doctor') {
-      user = await this.prisma.doctor.findUnique({
+      user = await this.prisma.doctor.findUniqueOrThrow({
         where: { email: payload.email },
       });
     }

@@ -26,13 +26,30 @@ export class RoomController {
     return this.roomService.create(createRoomDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.roomService.findOne(id);
+
+  @Get(':roomId')
+  findOne(@Param('roomId') roomId: string, @Body() userId: string) {
+    return this.roomService.findOne(userId, roomId);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.roomService.remove(id);
+  @Get('connect/:roomId')
+  connect(@Param('roomId') roomId: string, @Body() userId: string) {
+    return this.roomService.connect(userId, roomId);
+  }
+
+  @Patch(':roomId')
+  update(@Param('roomId') roomId: UpdateRoomDto, @Body() userId: string) {
+    return this.roomService.update(userId, roomId)
+  }
+
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.roomService.findOne(roomId);
+  // }
+
+  @Delete(':roomId')
+  remove(@Param('roomId') roomId: string) {
+    return this.roomService.remove(roomId);
   }
 }
+

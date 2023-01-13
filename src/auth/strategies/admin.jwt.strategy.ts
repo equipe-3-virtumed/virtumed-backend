@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -17,7 +17,7 @@ export class AdminStrategy extends PassportStrategy(Strategy, 'Admin') {
     let user = null;
 
     if (payload.userRole === 'admin') {
-      user = await this.prisma.admin.findUnique({
+      user = await this.prisma.admin.findUniqueOrThrow({
         where: { email: payload.email },
       });
     }
