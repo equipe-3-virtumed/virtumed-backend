@@ -26,7 +26,7 @@ export class DoctorController {
     summary: 'Create Doctor - Admin / Organization Auth',
   })
   @Post()
-  async create(@Body() createDoctorDto: CreateDoctorDto) {
+  async create(@Body() createDoctorDto: CreateDoctorDto): Promise<Doctor> {
     const register = await this.doctorService.create(createDoctorDto);
     return { ...register };
   }
