@@ -40,7 +40,6 @@ export class RoomController {
   @Patch(':roomId')
   update(@Param('roomId') roomId: UpdateRoomDto, @Body() userId: string) {
     return this.roomService.update(userId, roomId)
-
   }
 
   // @Get(':id')
