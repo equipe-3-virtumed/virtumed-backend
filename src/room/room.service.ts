@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Doctor, Organization, Patient } from '@prisma/client';
+import { Admin, Doctor, Organization, Patient } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
@@ -9,18 +9,19 @@ import { getTwilioToken } from './getToken.twilio.service';
 export class RoomService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createRoomDto: CreateRoomDto, user: Organization | Doctor | Patient) {
+  async create(
+    createRoomDto: CreateRoomDto,
+    user: Organization | Doctor | Patient,
+  ) {
     const { patientId, doctorId, appointmentTime } = createRoomDto;
 
-    if (user.role === 'patient') {
-      if (user.id !== patientId) {
-        throw new UnauthorizedException(
-          'A patient cannot create an appointment to another patient',
-        );
-      }
+    if (user.role === 'patient' && user.id !== patientId) {
+      throw new UnauthorizedException(
+        'A patient cannot create an appointment to another patient',
+      );
     }
-    
-    const appointment = await this.prisma.room.create
+
+    const appointment = await this.prisma.room.create; //continue...
 
     return 'This action schedule a new room';
   }
@@ -28,11 +29,13 @@ export class RoomService {
   findOne(userId: string, roomId: string) {
     const room = this.prisma.room.findUniqueOrThrow({
       where: { id: roomId },
-    }); // continue...
+    });
+
+    return room;
   }
 
-  connect(userId: string, roomId: string) {
-    return getTwilioToken(userId, roomId);
+  connect(user: Patient | Doctor, roomId: string) {
+    return getTwilioToken(user, roomId);
   }
 
   update(userId: string, roomId: UpdateRoomDto) {

@@ -8,6 +8,7 @@ import { AdminStrategy } from './strategies/admin.jwt.strategy';
 import { DoctorStrategy } from './strategies/doctor.jwt.strategy';
 import { GlobalStrategy } from './strategies/global.jwt.strategy';
 import { OrganizationStrategy } from './strategies/organization.jwt.strategy';
+import { PatientStrategy } from "./strategies/patient.jwt.strategy";
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { OrganizationStrategy } from './strategies/organization.jwt.strategy';
     AdminStrategy,
     OrganizationStrategy,
     DoctorStrategy,
+    PatientStrategy
   ],
 })
 export class AuthModule {}

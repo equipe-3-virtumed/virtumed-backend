@@ -70,11 +70,13 @@ model Patient {
 model Room {
   id String @id @unique @default(uuid())
 
-  DoctorId String @unique
-  doctor   Doctor @relation(fields: [DoctorId], references: [id], onDelete: Cascade)
+  name String @unique
 
-  PatientId String  @unique
-  patient   Patient @relation(fields: [PatientId], references: [id], onDelete: Cascade)
+  doctorId String @unique
+  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  patientId String  @unique
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
   appointmentTime DateTime
 }

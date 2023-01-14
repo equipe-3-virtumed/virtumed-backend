@@ -1,12 +1,22 @@
-import twilio from "twilio";
+import { Patient, Doctor } from '@prisma/client';
+import twilio from 'twilio';
 
-export const getTwilioToken = (userId: string, roomId: string) => {
-  const AccessToken = twilio.jwt.AccessToken;
-  const VideoGrant = AccessToken.VideoGrant;
-
+export const getTwilioToken = async (
+  user: Patient | Doctor,
+  roomId: string,
+) => {
   const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
   const twilioApiKey = process.env.TWILIO_API_KEY;
   const twilioApiSecret = process.env.TWILIO_API_SECRET;
+
+  const client = twilio(twilioAccountSid, twilioApiKey);
+
+  client.video.v1.rooms.create({
+    uniqueName: roomId,
+  });
+
+  const AccessToken = twilio.jwt.AccessToken;
+  const VideoGrant = AccessToken.VideoGrant;
 
   const videoGrant = new VideoGrant({
     room: roomId,
@@ -16,7 +26,7 @@ export const getTwilioToken = (userId: string, roomId: string) => {
     twilioAccountSid,
     twilioApiKey,
     twilioApiSecret,
-    { identity: userId },
+    { identity: user.id },
   );
   token.addGrant(videoGrant);
 
