@@ -27,13 +27,13 @@ export class PatientService {
   };
 
   // Find all patients
-  findAll(): Promise<Patient[]> {
-    return this.prisma.patient.findMany({ select: this.patientSelect });
+  async findAll(): Promise<Patient[]> {
+    return await this.prisma.patient.findMany({ select: this.patientSelect });
   }
 
   // Function to check ID
   async findById(id: string): Promise<Patient> {
-    const record = this.prisma.patient.findUnique({
+    const record = await this.prisma.patient.findUnique({
       where: { id },
       select: this.patientSelect,
     });
@@ -47,7 +47,7 @@ export class PatientService {
 
   // Find Patient By ID
   async findOne(id: string): Promise<Patient> {
-    return this.findById(id);
+    return await this.findById(id);
   }
 
   // Create Patient

@@ -12,8 +12,8 @@ export class RoomService {
     return 'This action schedule a new room';
   }
 
-  findOne(userId: string, roomId: string) {
-    const room = this.prisma.room.findUniqueOrThrow({
+  async findOne(userId: string, roomId: string) {
+    const room = await this.prisma.room.findUniqueOrThrow({
       where: { id: roomId },
     }); // continue... 
   }

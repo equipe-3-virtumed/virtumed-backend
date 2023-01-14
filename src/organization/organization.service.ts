@@ -27,15 +27,15 @@ export class OrganizationService {
   };
 
   // Find all organizations
-  findAll(): Promise<Organization[]> {
-    return this.prisma.organization.findMany({
+  async findAll(): Promise<Organization[]> {
+    return await this.prisma.organization.findMany({
       select: this.organizationSelect,
     });
   }
 
   // Function to check ID
   async findById(id: string): Promise<Organization> {
-    const record = this.prisma.organization.findUnique({
+    const record = await this.prisma.organization.findUnique({
       where: { id },
       select: this.organizationSelect,
     });
@@ -49,7 +49,7 @@ export class OrganizationService {
 
   // Find Organization By ID
   async findOne(id: string): Promise<Organization> {
-    return this.findById(id);
+    return await this.findById(id);
   }
 
   // Create Organization
