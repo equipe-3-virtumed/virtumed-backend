@@ -18,7 +18,7 @@ import { Doctor, Organization, Patient } from '@prisma/client';
 
 @ApiTags('Room')
 @ApiBearerAuth()
-// @UseGuards(AuthGuard(['Global']))
+@UseGuards(AuthGuard(['Global']))
 @Controller('room')
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
@@ -36,7 +36,7 @@ export class RoomController {
     return this.roomService.findOne(userId, roomId);
   }
 
-  // @UseGuards(AuthGuard(['Patient', 'Doctor']))
+  @UseGuards(AuthGuard(['Patient', 'Doctor']))
   @Get('connect/:roomId')
   connect(
     @LoggedUser() user: Patient | Doctor,

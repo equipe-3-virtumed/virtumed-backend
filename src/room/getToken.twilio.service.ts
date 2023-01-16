@@ -9,12 +9,11 @@ export const getTwilioToken = async (
   const twilioApiKey = process.env.TWILIO_API_KEY;
   const twilioApiSecret = process.env.TWILIO_API_SECRET;
 
-  const client = twilio(twilioAccountSid, twilioApiKey);
+  // const client = twilio(twilioAccountSid, twilioApiKey);
 
-  client.video.v1.rooms.create({
-    uniqueName: roomId,
-  });
-
+  // await client.video.v1.rooms.create({ uniqueName: roomId }).then((room) => {
+  //   console.log('🚀 ~ file: getToken.twilio.service.ts:16 ~ room', room);
+  // });
   const AccessToken = twilio.jwt.AccessToken;
   const VideoGrant = AccessToken.VideoGrant;
 
@@ -29,6 +28,7 @@ export const getTwilioToken = async (
     { identity: user.id },
   );
   token.addGrant(videoGrant);
+  console.log("🚀 ~ file: getToken.twilio.service.ts:33 ~ token.toJwt()", token.toJwt())
 
   return token.toJwt();
 };
