@@ -17,13 +17,14 @@ export class OrganizationService {
   private organizationSelect = {
     id: true,
     name: true,
-    email: true,
     cnpj: true,
+    phone: true,
+    email: true,
     password: false,
     image: true,
     role: true,
-    createAt: true,
-    updateAt: true,
+    createdAt: true,
+    updatedAt: true,
   };
 
   // Find all organizations

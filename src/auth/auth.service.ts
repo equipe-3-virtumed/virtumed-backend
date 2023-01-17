@@ -37,6 +37,9 @@ export class AuthService {
 
       delete user.cpf;
       delete user.password;
+      delete user.phone;
+      delete user.createdAt;
+      delete user.updatedAt;
 
       const userRole = user.role;
 

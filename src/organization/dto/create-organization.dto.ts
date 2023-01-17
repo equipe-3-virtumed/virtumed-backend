@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsMobilePhone,
+  IsNotEmpty,
+  IsString,
+  Matches,
+} from 'class-validator';
 
 export class CreateOrganizationDto {
   // NAME
@@ -14,10 +20,18 @@ export class CreateOrganizationDto {
   // LOGIN
   @ApiProperty({
     description: 'Organization / Hospital / Clinic email',
-    example: 'email@organization.com',
+    example: 'organization@virtumed.com',
   })
   @IsEmail()
   email: string;
+
+  //PHONE NUMBER
+  @ApiProperty({
+    description: "Doctor's phone",
+    example: "+5511912345678",
+  })
+  // @IsMobilePhone('pt-BR')
+  phone: string;
 
   // PASSWORD
   @ApiProperty({

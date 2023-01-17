@@ -17,13 +17,14 @@ export class DoctorService {
   private doctorSelect = {
     id: true,
     name: true,
-    email: true,
     crm: true,
+    phone: true,
+    email: true,
     password: false,    
     role: true,
     image: true,
-    createAt: true,
-    updateAt: true,
+    createdAt: true,
+    updatedAt: true,
   };
   // Find all doctors
   findAll() {

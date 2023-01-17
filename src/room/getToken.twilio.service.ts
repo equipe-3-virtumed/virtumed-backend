@@ -20,6 +20,7 @@ export const getTwilioToken = async (
   const videoGrant = new VideoGrant({
     room: roomId,
   });
+  console.log("🚀 ~ file: getToken.twilio.service.ts:23 ~ videoGrant", videoGrant)
 
   const token = new AccessToken(
     twilioAccountSid,
