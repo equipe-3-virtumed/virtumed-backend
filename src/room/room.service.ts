@@ -13,9 +13,13 @@ export class RoomService {
     createRoomDto: CreateRoomDto,
     user: Organization | Doctor | Patient,
   ) {
-    const { patientId, doctorId, appointmentTime } = createRoomDto;
+    const { patientId, doctorId, organizationId, appointmentTime } = createRoomDto;
 
-    if (user.role === 'patient' && user.id !== patientId) {
+    if (
+      (user.role === 'patient' && user.id !== patientId) ||
+      (user.role === 'doctor' && user.id !== doctorId) ||
+      (user.role === 'organization' && user.id !== organizationId)
+    ) {
       throw new UnauthorizedException(
         'A patient cannot create an appointment to another patient',
       );

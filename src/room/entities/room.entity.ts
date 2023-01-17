@@ -1,7 +1,8 @@
 export class Room {
   id?: string;
-  DoctorId: string;
-  doctorToken: string;
-  PatientId: string;
-  patientToken: string;
+  organizationId: string;
+  doctorId: string;
+  doctorToken?: string;
+  patientId: string;
+  patientToken?: string;
 }

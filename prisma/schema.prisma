@@ -8,12 +8,13 @@ datasource db {
 }
 
 model Admin {
-  id        String   @id @unique @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  image     String
-  role      String   @default("admin")
+  id       String @id @unique @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  image    String
+  role     String @default("admin")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -21,16 +22,19 @@ model Admin {
 }
 
 model Organization {
-  id        String   @id @unique @default(uuid())
-  name      String
-  email     String   @unique
-  phone     String   @unique
-  cnpj      String   @unique
-  password  String
-  image     String
-  role      String   @default("organization")
+  id       String @id @unique @default(uuid())
+  name     String
+  cnpj     String @unique
+  phone    String @unique
+  email    String @unique
+  password String
+  image    String
+  role     String @default("organization")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  room Room[]
 
   @@map("organization")
 }
@@ -48,7 +52,7 @@ model Doctor {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  room Room?
+  room Room[]
 
   @@map("doctor")
 }
@@ -66,7 +70,7 @@ model Patient {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  room Room?
+  room Room[]
 
   @@map("patient")
 }
@@ -74,13 +78,18 @@ model Patient {
 model Room {
   id String @id @unique @default(uuid())
 
-  doctorId    String @unique
-  doctor      Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  doctorId    String
+  doctor      Doctor @relation(fields: [doctorId], references: [id])
   doctorToken String
 
   patientId    String  @unique
-  patient      Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patient      Patient @relation(fields: [patientId], references: [id])
   patientToken String
 
   appointmentTime DateTime
+
+  @@map("room")
 }
