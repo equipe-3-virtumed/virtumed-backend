@@ -14,7 +14,7 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { LoggedUser } from 'src/auth/strategies/logged.decorator';
-import { Doctor, Organization, Patient } from '@prisma/client';
+import { Doctor, Organization, Patient, Room } from '@prisma/client';
 
 @ApiTags('Room')
 @ApiBearerAuth()
@@ -25,15 +25,18 @@ export class RoomController {
 
   @Post()
   async create(
-    @Body() createRoomDto: CreateRoomDto,
+    @Body() data: CreateRoomDto,
     @LoggedUser() user: Organization | Doctor | Patient,
-  ) {
-    return await this.roomService.create(createRoomDto, user);
+  ): Promise<Room> {
+    return await this.roomService.create(data, user);
   }
 
   @Get(':roomId')
-  findOne(@Param('roomId') roomId: string, @Body() userId: string) {
-    return this.roomService.findOne(userId, roomId);
+  async findOne(
+    @Param('roomId') roomId: string,
+    @LoggedUser() user: Organization | Doctor | Patient,
+  ): Promise<Room> {
+    return this.roomService.findOne(roomId, user);
   }
 
   @UseGuards(AuthGuard(['Patient', 'Doctor']))

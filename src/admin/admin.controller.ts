@@ -28,8 +28,8 @@ export class AdminController {
     summary: "Create Admin",
   })
   @Post()
-  async create(@Body() createAdminDto: CreateAdminDto): Promise<Admin> {
-    const register = await this.adminService.create(createAdminDto)
+  async create(@Body() data: CreateAdminDto): Promise<Admin> {
+    const register = await this.adminService.create(data)
     return { ...register} ;
   }
 

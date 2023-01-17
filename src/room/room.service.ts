@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Admin, Doctor, Organization, Patient } from '@prisma/client';
+import { Admin, Doctor, Organization, Patient, Room } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
@@ -10,32 +10,36 @@ export class RoomService {
   constructor(private prisma: PrismaService) {}
 
   async create(
-    createRoomDto: CreateRoomDto,
+    data: CreateRoomDto,
     user: Organization | Doctor | Patient,
-  ) {
-    const { patientId, doctorId, organizationId, appointmentTime } = createRoomDto;
+  ): Promise<Room> {
+    const { patientId, doctorId, organizationId, appointmentTime } = data;
 
-    if (
-      (user.role === 'patient' && user.id !== patientId) ||
-      (user.role === 'doctor' && user.id !== doctorId) ||
-      (user.role === 'organization' && user.id !== organizationId)
-    ) {
-      throw new UnauthorizedException(
-        'A patient cannot create an appointment to another patient',
-      );
+    if (user.id === patientId || doctorId || organizationId) {
+      const scheduledAppointment = await this.prisma.room.create({ data });
+      return scheduledAppointment;
     }
 
-    const appointment = await this.prisma.room.create; //continue...
-
-    return 'This action schedule a new room';
+    throw new UnauthorizedException(
+      'You cannot view or create an appointment to another patient or a patient outside your organization',
+    );
   }
 
-  findOne(userId: string, roomId: string) {
-    const room = this.prisma.room.findUniqueOrThrow({
+  async findOne(
+    roomId: string,
+    user: Organization | Doctor | Patient,
+  ): Promise<Room> {
+    const room = await this.prisma.room.findUniqueOrThrow({
       where: { id: roomId },
     });
 
-    return room;
+    if (user.id === room.patientId || room.doctorId || room.organizationId) {
+      return room;
+    }
+
+    throw new UnauthorizedException(
+      'You cannot view or create an appointment to another patient or a patient outside your organization',
+    );
   }
 
   connect(user: Patient | Doctor, roomId: string) {
