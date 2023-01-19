@@ -9,7 +9,7 @@ async function bootstrap() {
     cors: true,
   });
 
-  // app.set('trust-proxy', 1); deploy again
+  // app.set('trust-proxy', 1);
 
   app.useGlobalPipes(new ValidationPipe());
 

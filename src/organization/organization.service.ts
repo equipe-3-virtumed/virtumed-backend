@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-// import { handleError } from 'src/utils/handle-error.util';
+import { handleError } from 'src/utils/handle-error.util';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
 import { Organization } from './entities/organization.entity';
@@ -71,7 +71,7 @@ export class OrganizationService {
 
     const createdOrganization = await this.prisma.organization
       .create({ data, select: this.organizationSelect })
-      // .catch(handleError);
+      .catch(handleError);
     return { ...createdOrganization };
   }
 

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-// import { handleError } from 'src/utils/handle-error.util';
+import { handleError } from 'src/utils/handle-error.util';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { Admin } from './entities/admin.entity';
@@ -63,7 +63,7 @@ export class AdminService {
 
     const createdAdmin = await this.prisma.admin
       .create({ data, select: this.adminSelect })
-      // .catch(handleError);
+      .catch(handleError);
     return { ...createdAdmin };
   }
 

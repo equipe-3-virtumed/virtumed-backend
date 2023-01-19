@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-// import { handleError } from 'src/utils/handle-error.util';
+import { handleError } from 'src/utils/handle-error.util';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { Doctor } from './entities/doctor.entity';
@@ -63,7 +63,7 @@ export class DoctorService {
 
     const createdDoctor = await this.prisma.doctor
       .create({ data, select: this.doctorSelect })
-      // .catch(handleError);
+      .catch(handleError);
     return { ...createdDoctor };
   }
 
