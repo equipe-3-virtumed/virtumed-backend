@@ -29,34 +29,33 @@ export class AdminController {
     summary: 'Create Admin',
   })
   @Post()
-
   async create(@Body() data: CreateAdminDto): Promise<Admin> {
-    const register = await this.adminService.create(data)
-    return { ...register} ;
+    const register = await this.adminService.create(data);
+    return { ...register };
   }
 
   @ApiOperation({
     summary: 'View all Admin`s',
   })
   @Get()
-  findAll(): Promise<Admin[]> {
-    return this.adminService.findAll();
+  async findAll(): Promise<Admin[]> {
+    return await this.adminService.findAll();
   }
 
   @ApiOperation({
     summary: 'View Admin by id',
   })
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Admin> {
-    return this.adminService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<Admin> {
+    return await this.adminService.findOne(id);
   }
 
   @ApiOperation({
     summary: 'Edit Admin by id',
   })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAdminDto: UpdateAdminDto) {
-    return this.adminService.update(id, updateAdminDto);
+  async update(@Param('id') id: string, @Body() updateAdminDto: UpdateAdminDto) {
+    return await this.adminService.update(id, updateAdminDto);
   }
 
   @ApiOperation({
@@ -64,7 +63,7 @@ export class AdminController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.adminService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.adminService.remove(id);
   }
 }

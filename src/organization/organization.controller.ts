@@ -28,11 +28,12 @@ export class OrganizationController {
     summary: 'Create Organization - Only Admins can create an Organization',
   })
   @Post()
-
   async create(
     @Body() createOrganizationDto: CreateOrganizationDto,
   ): Promise<Organization> {
-    const register = await this.organizationService.create(createOrganizationDto);
+    const register = await this.organizationService.create(
+      createOrganizationDto,
+    );
     return { ...register };
   }
 
@@ -41,8 +42,8 @@ export class OrganizationController {
     summary: 'View all Organization`s - Global Auth',
   })
   @Get()
-  findAll(): Promise<Organization[]> {
-    return this.organizationService.findAll();
+  async findAll(): Promise<Organization[]> {
+    return await this.organizationService.findAll();
   }
 
   @UseGuards(AuthGuard('Global'))
@@ -50,8 +51,8 @@ export class OrganizationController {
     summary: 'View Organization by id - Global Auth',
   })
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Organization> {
-    return this.organizationService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<Organization> {
+    return await this.organizationService.findOne(id);
   }
 
   @UseGuards(AuthGuard(['Admin', 'Organization']))
@@ -59,20 +60,20 @@ export class OrganizationController {
     summary: 'Edit Organization by id - Admin / Organization Auth',
   })
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateOrganizationDto: UpdateOrganizationDto,
   ) {
-    return this.organizationService.update(id, updateOrganizationDto);
+    return await this.organizationService.update(id, updateOrganizationDto);
   }
 
-    @UseGuards(AuthGuard(['Admin', 'Organization']))
+  @UseGuards(AuthGuard(['Admin', 'Organization']))
   @ApiOperation({
     summary: 'Delete Organization by id - Admin / Organization Auth',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.organizationService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.organizationService.remove(id);
   }
 }

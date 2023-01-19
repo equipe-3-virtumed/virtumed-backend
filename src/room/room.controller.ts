@@ -36,25 +36,25 @@ export class RoomController {
     @Param('roomId') roomId: string,
     @LoggedUser() user: Organization | Doctor | Patient,
   ): Promise<Room> {
-    return this.roomService.findOne(roomId, user);
+    return await this.roomService.findOne(roomId, user);
   }
 
   @UseGuards(AuthGuard(['Patient', 'Doctor']))
   @Get('connect/:roomId')
-  connect(
+  async connect(
     @LoggedUser() user: Patient | Doctor,
     @Param('roomId') roomId: string,
   ) {
-    return this.roomService.connect(user, roomId);
+    return await this.roomService.connect(user, roomId);
   }
 
   @Patch(':roomId')
-  update(@Param('roomId') roomId: UpdateRoomDto, @Body() userId: string) {
-    return this.roomService.update(userId, roomId);
+  async update(@Param('roomId') roomId: UpdateRoomDto, @Body() userId: string) {
+    return await this.roomService.update(userId, roomId);
   }
 
   @Delete(':roomId')
-  remove(@Param('roomId') roomId: string) {
-    return this.roomService.remove(roomId);
+  async remove(@Param('roomId') roomId: string) {
+    return await this.roomService.remove(roomId);
   }
 }

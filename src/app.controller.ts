@@ -12,6 +12,6 @@ export class AppController {
     summary: 'View application status',
   })
   getStatus() {
-    return this.appService.getStatus('http://localhost:3333');
+    return this.appService.getStatus(process.env.ENV_URL);
   }
 }

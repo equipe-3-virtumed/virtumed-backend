@@ -29,8 +29,8 @@ export class AuthController {
   @ApiOperation({
     summary: 'Log in, receiving an authentication token',
   })
-  login(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
-    return this.authService.Login(loginDto);
+  async login(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
+    return await this.authService.Login(loginDto);
   }
 
   @Get('auth')
@@ -40,6 +40,7 @@ export class AuthController {
   })
   @ApiBearerAuth()
   profile(@LoggedUser() user: Admin | Doctor | Organization | Patient) {
+    console.log("🚀 ~ file: auth.controller.ts:43 ~ AuthController ~ profile ~ user", user)
     return user;
   }
 }
