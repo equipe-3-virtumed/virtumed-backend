@@ -33,7 +33,7 @@ export class DoctorService {
 
   // Function to check ID
   async findById(id: string): Promise<Doctor> {
-    const record = this.prisma.doctor.findUnique({
+    const record = await this.prisma.doctor.findUnique({
       where: { id },
       select: this.doctorSelect,
     });
@@ -45,7 +45,7 @@ export class DoctorService {
 
   // Find Doctor By ID
   async findOne(id: string): Promise<Doctor> {
-    return this.findById(id);
+    return await this.findById(id);
   }
 
   // Create Doctor

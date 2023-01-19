@@ -28,6 +28,7 @@ export class OrganizationController {
     summary: 'Create Organization - Only Admins can create an Organization',
   })
   @Post()
+
   async create(
     @Body() createOrganizationDto: CreateOrganizationDto,
   ): Promise<Organization> {
