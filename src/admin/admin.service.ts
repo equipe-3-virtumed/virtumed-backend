@@ -22,8 +22,8 @@ export class AdminService {
     password: false,
     image: true,
     role: true,
-    createAt: true,
-    updateAt: true,
+    createdAt: true,
+    updatedAt: true,
   };
 
   // Find all admins

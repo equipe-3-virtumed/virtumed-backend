@@ -18,12 +18,13 @@ export class PatientService {
     id: true,
     name: true,
     cpf: true,
+    phone: true,
     email: true,
     password: false,
     image: true,
     role: true,
-    createAt: true,
-    updateAt: true,
+    createdAt: true,
+    updatedAt: true,
   };
 
   // Find all patients

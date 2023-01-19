@@ -1,30 +1,38 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
+import { IsEmail, IsMobilePhone, IsNotEmpty, IsString, Matches } from 'class-validator';
 
 export class CreatePatientDto {
   // NAME
   @ApiProperty({
-    description: 'Patient`s name',
+    description: "Patient's name",
     example: 'Hashirama',
   })
   @IsString()
   @IsNotEmpty()
   name: string;
 
+  // CPF
+  @ApiProperty({
+    description: "Patient's CPF",
+    example: '000.000.000-00',
+  })
+  cpf: string;
+
+  //PHONE NUMBER
+  @ApiProperty({
+    description: "Patient's phone",
+    example: "+5511912345678",
+  })
+  // @IsMobilePhone('pt-BR')
+  phone: string;
+
   // LOGIN
   @ApiProperty({
-    description: 'Patient`s login',
+    description: "Patient's email",
     example: 'patient@virtumed.com',
   })
   @IsEmail()
   email: string;
-
-  // CPF
-  @ApiProperty({
-    description: 'Patient CPF',
-    example: '000.000.000-00',
-  })
-  cpf: string;
 
   // PASSWORD
   @ApiProperty({
@@ -38,14 +46,14 @@ export class CreatePatientDto {
 
   // CONFIRM PASSWORD
   @ApiProperty({
-    description: 'Digite novamente a senha anterior',
+    description: 'Password confirmation',
     example: '@Abcd1234',
   })
   confirmpassword: string;
 
   // IMAGE
   @ApiProperty({
-    description: 'Link Image patient',
+    description: 'Image URL or file',
     example: 'url',
   })
   image: string;
