@@ -42,11 +42,43 @@ export class RoomService {
     );
   }
 
-  connect(user: Patient | Doctor, roomId: string) {
-    return getTwilioToken(user, roomId);
+  async connect(user: Patient | Doctor, roomId: string) {
+    const {
+      doctorId,
+      doctorVideoToken,
+      doctorChatToken,
+      patientId,
+      patientVideoToken,
+      patientChatToken,
+    } = await this.prisma.room.findUniqueOrThrow({
+      where: { id: roomId },
+    });
+
+    if (user.id === doctorId) {
+      if (doctorVideoToken && doctorChatToken) {
+        return { doctorVideoToken, doctorChatToken };
+      } else {
+        const { videoToken, chatToken } = await getTwilioToken(user, roomId);
+        await this.update(roomId); //CONTINUE UPDATE
+        return { videoToken, chatToken };
+      }
+    }
+
+    if (user.id === patientId) {
+      if (patientVideoToken && patientChatToken) {
+        return { patientVideoToken, patientChatToken };
+      } else {
+        const { videoToken, chatToken } = await getTwilioToken(user, roomId);
+        return { videoToken, chatToken };
+      }
+    }
+
+    throw new UnauthorizedException(
+      'You cannot view or create an appointment to another patient or a patient outside your organization',
+    );
   }
 
-  update(userId: string, roomId: UpdateRoomDto) {
+  update(roomId: string, userId?: string, room?: UpdateRoomDto) {
     return 'This action updates a room';
   }
 

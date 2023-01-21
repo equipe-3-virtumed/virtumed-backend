@@ -23,13 +23,16 @@ export const getTwilioToken = async (
   });
   console.log("🚀 ~ file: getToken.twilio.service.ts:23 ~ videoGrant", videoGrant)
 
-  const token = new AccessToken(
+  const getVideoToken = new AccessToken(
     twilioAccountSid,
     twilioApiKey,
     twilioApiSecret,
     { identity: user.id },
   );
-  token.addGrant(videoGrant);
+  getVideoToken.addGrant(videoGrant);
 
-  return token.toJwt();
+  const videoToken = getVideoToken.toJwt();
+  const chatToken = "getChatToken.toJwt()";
+
+  return { videoToken, chatToken }
 };
