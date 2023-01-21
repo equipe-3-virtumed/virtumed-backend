@@ -42,15 +42,20 @@ export class RoomController {
   @UseGuards(AuthGuard(['Patient', 'Doctor']))
   @Get('connect/:roomId')
   async connect(
-    @LoggedUser() user: Patient | Doctor,
     @Param('roomId') roomId: string,
+    @LoggedUser() user: Patient | Doctor,    
   ) {
-    return await this.roomService.connect(user, roomId);
+    return await this.roomService.connect(roomId, user);
   }
 
+  @UseGuards(AuthGuard(['Patient', 'Doctor', 'Organization']))
   @Patch(':roomId')
-  async update(@Param('roomId') roomId: UpdateRoomDto, @Body() userId: string) {
-    return await this.roomService.update(userId, roomId);
+  async update(
+    @Param('roomId') roomId: string,
+    @LoggedUser() user: Organization | Doctor | Patient,
+    @Body() updateRoom: UpdateRoomDto,
+  ) {
+    return await this.roomService.update(roomId, user, false, updateRoom);
   }
 
   @Delete(':roomId')

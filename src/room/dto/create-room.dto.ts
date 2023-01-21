@@ -17,6 +17,8 @@ export class CreateRoomDto {
   @IsString()
   @IsNotEmpty()
   doctorId: string;
+  doctorVideoToken?: string;
+  doctorChatToken?: string;
 
   @ApiProperty({
     description: "Patient's ID",
@@ -25,6 +27,8 @@ export class CreateRoomDto {
   @IsString()
   @IsNotEmpty()
   patientId: string;
+  patientVideoToken?: string;
+  patientChatToken?: string;
 
   @ApiProperty({
     description: "Scheduled time for the appointment",

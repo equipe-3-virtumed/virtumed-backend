@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Admin, Doctor, Organization, Patient, Room } from '@prisma/client';
+import { Doctor, Organization, Patient, Room } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
@@ -42,7 +42,7 @@ export class RoomService {
     );
   }
 
-  async connect(user: Patient | Doctor, roomId: string) {
+  async connect(roomId: string, user: Patient | Doctor) {
     const {
       doctorId,
       doctorVideoToken,
@@ -50,16 +50,17 @@ export class RoomService {
       patientId,
       patientVideoToken,
       patientChatToken,
-    } = await this.prisma.room.findUniqueOrThrow({
-      where: { id: roomId },
-    });
+    } = await this.findOne(roomId, user);
 
     if (user.id === doctorId) {
       if (doctorVideoToken && doctorChatToken) {
         return { doctorVideoToken, doctorChatToken };
       } else {
         const { videoToken, chatToken } = await getTwilioToken(user, roomId);
-        await this.update(roomId); //CONTINUE UPDATE
+        const doctorVideoToken = videoToken;
+        const doctorChatToken = chatToken;
+        const updateRoom = { doctorVideoToken, doctorChatToken };
+        await this.update(roomId, user, true, updateRoom);
         return { videoToken, chatToken };
       }
     }
@@ -69,6 +70,10 @@ export class RoomService {
         return { patientVideoToken, patientChatToken };
       } else {
         const { videoToken, chatToken } = await getTwilioToken(user, roomId);
+        const patientVideoToken = videoToken;
+        const patientChatToken = chatToken;
+        const updateRoom = { patientVideoToken, patientChatToken };
+        await this.update(roomId, user, true, updateRoom);
         return { videoToken, chatToken };
       }
     }
@@ -78,8 +83,17 @@ export class RoomService {
     );
   }
 
-  update(roomId: string, userId?: string, room?: UpdateRoomDto) {
-    return 'This action updates a room';
+  async update(
+    roomId: string,
+    user: Organization | Doctor | Patient,
+    connect: boolean,
+    updateRoom?: UpdateRoomDto,
+  ) {
+    if (!connect) {
+      await this.findOne(roomId, user);
+    }
+    const data = { ...updateRoom };
+    await this.prisma.room.update({ data, where: { id: roomId } });
   }
 
   remove(id: string) {
