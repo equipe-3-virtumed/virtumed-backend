@@ -4,7 +4,7 @@ import { IsISO8601, IsNotEmpty, IsString } from "class-validator";
 export class CreateRoomDto {
   @ApiProperty({
     description: "Doctor's Organization ID",
-    example: "ab369186-6688-4af1-b87a-2e65d22771d5",
+    example: "4f3f6d83-2c0e-41ac-aaaf-3be209f8d52c",
   })
   @IsString()
   @IsNotEmpty()
@@ -12,7 +12,7 @@ export class CreateRoomDto {
 
   @ApiProperty({
     description: "Doctor's ID",
-    example: "ab369186-6688-4af1-b87a-2e65d22771d5",
+    example: "16a49239-0d77-4519-934f-90af0beeca3b",
   })
   @IsString()
   @IsNotEmpty()
@@ -22,7 +22,7 @@ export class CreateRoomDto {
 
   @ApiProperty({
     description: "Patient's ID",
-    example: "46eef1a1-e1c0-4e5e-bb2c-e3390f0dff30",
+    example: "fd44bd4b-baa9-4411-a4be-27326cef694b",
   })
   @IsString()
   @IsNotEmpty()

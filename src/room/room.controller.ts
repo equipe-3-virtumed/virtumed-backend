@@ -31,6 +31,13 @@ export class RoomController {
     return await this.roomService.create(data, user);
   }
 
+  @Get()
+  async findAll(
+    @LoggedUser() user: Organization | Doctor | Patient,
+  ): Promise<Room[] | Room | string> {
+    return await this.roomService.findAll(user);
+  }
+
   @Get(':roomId')
   async findOne(
     @Param('roomId') roomId: string,
@@ -43,7 +50,7 @@ export class RoomController {
   @Get('connect/:roomId')
   async connect(
     @Param('roomId') roomId: string,
-    @LoggedUser() user: Patient | Doctor,    
+    @LoggedUser() user: Patient | Doctor,
   ) {
     return await this.roomService.connect(roomId, user);
   }

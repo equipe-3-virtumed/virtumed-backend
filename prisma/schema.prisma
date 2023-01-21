@@ -86,7 +86,7 @@ model Room {
   doctorVideoToken String?
   doctorChatToken  String?
 
-  patientId         String  @unique
+  patientId         String
   patient           Patient @relation(fields: [patientId], references: [id])
   patientVideoToken String?
   patientChatToken  String?

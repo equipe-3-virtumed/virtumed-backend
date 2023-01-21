@@ -42,6 +42,32 @@ export class RoomService {
     );
   }
 
+  async findAll(
+    user: Organization | Doctor | Patient,
+  ): Promise<Room[] | Room | string> {
+    if (user.role === 'organization') {
+      return await this.prisma.room.findMany({
+        where: { organizationId: user.id },
+      });
+    }
+
+    if (user.role === 'doctor') {
+      return await this.prisma.room.findMany({
+        where: { doctorId: user.id },
+      });
+    }
+
+    if (user.role === 'patient') {
+      return await this.prisma.room.findMany({
+        where: { patientId: user.id },
+      });
+    }
+
+    throw new UnauthorizedException(
+      'You cannot view or create an appointment to another patient or a patient outside your organization',
+    );
+  }
+
   async connect(roomId: string, user: Patient | Doctor) {
     const {
       doctorId,
