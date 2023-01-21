@@ -3,7 +3,7 @@ import { Admin, Doctor, Organization, Patient, Room } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
-import { getTwilioToken } from './getToken.twilio.service';
+import { getTwilioToken } from './get.twilio.token.service';
 
 @Injectable()
 export class RoomService {

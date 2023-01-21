@@ -81,13 +81,15 @@ model Room {
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
-  doctorId    String
-  doctor      Doctor @relation(fields: [doctorId], references: [id])
-  doctorToken String
+  doctorId         String
+  doctor           Doctor @relation(fields: [doctorId], references: [id])
+  doctorVideoToken String
+  doctorChatToken  String
 
-  patientId    String  @unique
-  patient      Patient @relation(fields: [patientId], references: [id])
-  patientToken String
+  patientId         String  @unique
+  patient           Patient @relation(fields: [patientId], references: [id])
+  patientVideoToken String
+  patientChatToken  String
 
   appointmentTime DateTime
 

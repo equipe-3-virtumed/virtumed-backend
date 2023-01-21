@@ -16,6 +16,7 @@ export const getTwilioToken = async (
   // });
   const AccessToken = twilio.jwt.AccessToken;
   const VideoGrant = AccessToken.VideoGrant;
+  // const ChatGrant = AccessToken.ChatGrant;
 
   const videoGrant = new VideoGrant({
     room: roomId,
@@ -29,7 +30,6 @@ export const getTwilioToken = async (
     { identity: user.id },
   );
   token.addGrant(videoGrant);
-  console.log("🚀 ~ file: getToken.twilio.service.ts:33 ~ token.toJwt()", token.toJwt())
 
   return token.toJwt();
 };
