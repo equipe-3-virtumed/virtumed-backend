@@ -2,7 +2,9 @@ export class Room {
   id?: string;
   organizationId: string;
   doctorId: string;
-  doctorToken?: string;
+  doctorVideoToken?: string;
+  doctorChatToken?: string;
   patientId: string;
-  patientToken?: string;
+  patientVideoToken?: string;
+  patientChatToken?: string;
 }

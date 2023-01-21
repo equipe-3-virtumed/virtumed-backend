@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Admin, Doctor, Organization, Patient, Room } from '@prisma/client';
+import { Doctor, Organization, Patient, Room } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
-import { getTwilioToken } from './getToken.twilio.service';
+import { getTwilioToken } from './get.twilio.token.service';
 
 @Injectable()
 export class RoomService {
@@ -42,12 +42,81 @@ export class RoomService {
     );
   }
 
-  connect(user: Patient | Doctor, roomId: string) {
-    return getTwilioToken(user, roomId);
+  async findAll(
+    user: Organization | Doctor | Patient,
+  ): Promise<Room[] | Room | string> {
+    if (user.role === 'organization') {
+      return await this.prisma.room.findMany({
+        where: { organizationId: user.id },
+      });
+    }
+
+    if (user.role === 'doctor') {
+      return await this.prisma.room.findMany({
+        where: { doctorId: user.id },
+      });
+    }
+
+    if (user.role === 'patient') {
+      return await this.prisma.room.findMany({
+        where: { patientId: user.id },
+      });
+    }
+
+    throw new UnauthorizedException(
+      'You cannot view or create an appointment to another patient or a patient outside your organization',
+    );
   }
 
-  update(userId: string, roomId: UpdateRoomDto) {
-    return 'This action updates a room';
+  async connect(roomId: string, user: Patient | Doctor) {
+    const {
+      doctorId,
+      doctorVideoToken,
+      doctorChatToken,
+      patientId,
+      patientVideoToken,
+      patientChatToken,
+    } = await this.findOne(roomId, user);
+
+    if (user.id === doctorId) {
+      if (doctorVideoToken && doctorChatToken) {
+        return { doctorVideoToken, doctorChatToken };
+      } else {
+        const { videoToken, chatToken } = await getTwilioToken(user, roomId);
+        const doctorVideoToken = videoToken;
+        const doctorChatToken = chatToken;
+        const updateRoom = { doctorVideoToken, doctorChatToken };
+        await this.update(roomId, user, updateRoom);
+        return { videoToken, chatToken };
+      }
+    }
+
+    if (user.id === patientId) {
+      if (patientVideoToken && patientChatToken) {
+        return { patientVideoToken, patientChatToken };
+      } else {
+        const { videoToken, chatToken } = await getTwilioToken(user, roomId);
+        const patientVideoToken = videoToken;
+        const patientChatToken = chatToken;
+        const updateRoom = { patientVideoToken, patientChatToken };
+        await this.update(roomId, user, updateRoom);
+        return { videoToken, chatToken };
+      }
+    }
+
+    throw new UnauthorizedException(
+      'You cannot view or create an appointment to another patient or a patient outside your organization',
+    );
+  }
+
+  async update(
+    roomId: string,
+    user: Organization | Doctor | Patient,
+    updateRoom?: UpdateRoomDto,
+  ) {
+    await this.findOne(roomId, user);
+    const data = { ...updateRoom };
+    await this.prisma.room.update({ data, where: { id: roomId } });
   }
 
   remove(id: string) {

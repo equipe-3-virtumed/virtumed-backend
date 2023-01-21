@@ -16,20 +16,23 @@ export const getTwilioToken = async (
   // });
   const AccessToken = twilio.jwt.AccessToken;
   const VideoGrant = AccessToken.VideoGrant;
+  // const ChatGrant = AccessToken.ChatGrant;
 
   const videoGrant = new VideoGrant({
     room: roomId,
   });
   console.log("🚀 ~ file: getToken.twilio.service.ts:23 ~ videoGrant", videoGrant)
 
-  const token = new AccessToken(
+  const getVideoToken = new AccessToken(
     twilioAccountSid,
     twilioApiKey,
     twilioApiSecret,
     { identity: user.id },
   );
-  token.addGrant(videoGrant);
-  console.log("🚀 ~ file: getToken.twilio.service.ts:33 ~ token.toJwt()", token.toJwt())
+  getVideoToken.addGrant(videoGrant);
 
-  return token.toJwt();
+  const videoToken = getVideoToken.toJwt();
+  const chatToken = "getChatToken.toJwt()";
+
+  return { videoToken, chatToken }
 };
