@@ -19,26 +19,12 @@ export class CreateRoomDto {
   doctorId: string;
 
   @ApiProperty({
-    description: "Doctor's Token",
-    example: "IdU4eN5dIf8Iebs3k...",
-  })
-  @IsString()
-  doctorToken: string;
-
-  @ApiProperty({
     description: "Patient's ID",
     example: "46eef1a1-e1c0-4e5e-bb2c-e3390f0dff30",
   })
   @IsString()
   @IsNotEmpty()
   patientId: string;
-
-  @ApiProperty({
-    description: "Patient's Token",
-    example: "IdU4eN5dIf8Iebs3k...",
-  })
-  @IsString()
-  patientToken: string;
 
   @ApiProperty({
     description: "Scheduled time for the appointment",

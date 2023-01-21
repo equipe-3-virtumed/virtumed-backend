@@ -8,12 +8,12 @@ datasource db {
 }
 
 model Admin {
-  id       String @id @unique @default(uuid())
+  id       String  @id @unique @default(uuid())
   name     String
-  email    String @unique
+  email    String  @unique
   password String
-  image    String
-  role     String @default("admin")
+  image    String?
+  role     String  @default("admin")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -22,14 +22,14 @@ model Admin {
 }
 
 model Organization {
-  id       String @id @unique @default(uuid())
+  id       String  @id @unique @default(uuid())
   name     String
-  cnpj     String @unique
-  phone    String @unique
-  email    String @unique
+  cnpj     String  @unique
+  phone    String  @unique
+  email    String  @unique
   password String
-  image    String
-  role     String @default("organization")
+  image    String?
+  role     String  @default("organization")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -40,14 +40,14 @@ model Organization {
 }
 
 model Doctor {
-  id       String @id @unique @default(uuid())
+  id       String  @id @unique @default(uuid())
   name     String
-  crm      String @unique
-  phone    String @unique
-  email    String @unique
+  crm      String  @unique
+  phone    String  @unique
+  email    String  @unique
   password String
-  image    String
-  role     String @default("doctor")
+  image    String?
+  role     String  @default("doctor")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -58,14 +58,14 @@ model Doctor {
 }
 
 model Patient {
-  id       String @id @unique @default(uuid())
+  id       String  @id @unique @default(uuid())
   name     String
-  cpf      String @unique
-  phone    String @unique
-  email    String @unique
+  cpf      String  @unique
+  phone    String  @unique
+  email    String  @unique
   password String
-  image    String
-  role     String @default("patient")
+  image    String?
+  role     String  @default("patient")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -82,14 +82,14 @@ model Room {
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   doctorId         String
-  doctor           Doctor @relation(fields: [doctorId], references: [id])
-  doctorVideoToken String
-  doctorChatToken  String
+  doctor           Doctor  @relation(fields: [doctorId], references: [id])
+  doctorVideoToken String?
+  doctorChatToken  String?
 
   patientId         String  @unique
   patient           Patient @relation(fields: [patientId], references: [id])
-  patientVideoToken String
-  patientChatToken  String
+  patientVideoToken String?
+  patientChatToken  String?
 
   appointmentTime DateTime
 
