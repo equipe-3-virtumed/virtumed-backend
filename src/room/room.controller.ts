@@ -62,7 +62,7 @@ export class RoomController {
     @LoggedUser() user: Organization | Doctor | Patient,
     @Body() updateRoom: UpdateRoomDto,
   ) {
-    return await this.roomService.update(roomId, user, false, updateRoom);
+    return await this.roomService.update(roomId, user, updateRoom);
   }
 
   @Delete(':roomId')

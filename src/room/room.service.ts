@@ -86,7 +86,7 @@ export class RoomService {
         const doctorVideoToken = videoToken;
         const doctorChatToken = chatToken;
         const updateRoom = { doctorVideoToken, doctorChatToken };
-        await this.update(roomId, user, true, updateRoom);
+        await this.update(roomId, user, updateRoom);
         return { videoToken, chatToken };
       }
     }
@@ -99,7 +99,7 @@ export class RoomService {
         const patientVideoToken = videoToken;
         const patientChatToken = chatToken;
         const updateRoom = { patientVideoToken, patientChatToken };
-        await this.update(roomId, user, true, updateRoom);
+        await this.update(roomId, user, updateRoom);
         return { videoToken, chatToken };
       }
     }
@@ -112,12 +112,9 @@ export class RoomService {
   async update(
     roomId: string,
     user: Organization | Doctor | Patient,
-    connect: boolean,
     updateRoom?: UpdateRoomDto,
   ) {
-    if (!connect) {
-      await this.findOne(roomId, user);
-    }
+    await this.findOne(roomId, user);
     const data = { ...updateRoom };
     await this.prisma.room.update({ data, where: { id: roomId } });
   }
