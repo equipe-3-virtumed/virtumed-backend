@@ -1,6 +1,6 @@
 export class Room {
   id?: string;
-  open: boolean;
+  open?: boolean;
   organizationId: string;
   doctorId: string;
   doctorVideoToken?: string;
