@@ -1,7 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsISO8601, IsNotEmpty, IsString } from "class-validator";
+import { IsBoolean, IsISO8601, IsNotEmpty, IsString } from "class-validator";
 
 export class CreateRoomDto {
+  @ApiProperty({
+    description: "Doctor's Organization ID",
+    example: "4f3f6d83-2c0e-41ac-aaaf-3be209f8d52c",
+  })
+  @IsBoolean()
+  open: boolean;
+
   @ApiProperty({
     description: "Doctor's Organization ID",
     example: "4f3f6d83-2c0e-41ac-aaaf-3be209f8d52c",

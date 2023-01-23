@@ -13,7 +13,7 @@ export class RoomService {
     data: CreateRoomDto,
     user: Organization | Doctor | Patient,
   ): Promise<Room> {
-    const { patientId, doctorId, organizationId, appointmentTime } = data;
+    const { patientId, doctorId, organizationId } = data;
 
     if (user.id === patientId || doctorId || organizationId) {
       const scheduledAppointment = await this.prisma.room.create({ data });
