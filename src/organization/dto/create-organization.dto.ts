@@ -27,7 +27,7 @@ export class CreateOrganizationDto {
 
   //PHONE NUMBER
   @ApiProperty({
-    description: "Doctor's phone",
+    description: "Organization's phone",
     example: "+5511912345678",
   })
   // @IsMobilePhone('pt-BR')

@@ -17,6 +17,14 @@ export class CreateAdminDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+  
+  //PHONE NUMBER
+  @ApiProperty({
+    description: "Admin's phone",
+    example: "+5511912345678",
+  })
+  // @IsMobilePhone('pt-BR')
+  phone: string;
 
   // LOGIN
   @ApiProperty({
@@ -25,6 +33,7 @@ export class CreateAdminDto {
   })
   @IsEmail()
   email: string;
+
 
   // PASSWORD
   @ApiProperty({

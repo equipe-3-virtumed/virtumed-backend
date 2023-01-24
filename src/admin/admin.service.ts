@@ -18,6 +18,7 @@ export class AdminService {
   private adminSelect = {
     id: true,
     name: true,
+    phone: true,
     email: true,
     password: false,
     image: true,
