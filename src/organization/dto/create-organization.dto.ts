@@ -35,7 +35,7 @@ export class CreateOrganizationDto {
 
   // PASSWORD
   @ApiProperty({
-    description: 'Admin password',
+    description: 'Organization password',
     example: '@Abcd1234',
   })
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
