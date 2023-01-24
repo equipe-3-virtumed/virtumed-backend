@@ -80,7 +80,9 @@ export class RoomService {
 
     if (user.id === doctorId) {
       if (doctorVideoToken && doctorChatToken) {
-        return { doctorVideoToken, doctorChatToken };
+        const videoToken = doctorVideoToken;
+        const chatToken = doctorChatToken;
+        return { videoToken, chatToken };
       } else {
         const { videoToken, chatToken } = await getTwilioToken(user, roomId);
         const doctorVideoToken = videoToken;
@@ -93,7 +95,9 @@ export class RoomService {
 
     if (user.id === patientId) {
       if (patientVideoToken && patientChatToken) {
-        return { patientVideoToken, patientChatToken };
+        const videoToken = patientVideoToken;
+        const chatToken = patientChatToken;
+        return { videoToken, chatToken };
       } else {
         const { videoToken, chatToken } = await getTwilioToken(user, roomId);
         const patientVideoToken = videoToken;
