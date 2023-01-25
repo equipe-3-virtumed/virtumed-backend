@@ -1,4 +1,4 @@
-export class Room {
+export class Appointment {
   id?: string;
   open?: boolean;
   organizationId: string;

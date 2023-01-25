@@ -19,7 +19,7 @@ async function bootstrap() {
     .setVersion('1.0.3')
     .addBearerAuth()
     .addTag('Auth')
-    .addTag('Room')
+    .addTag('Appointment')
     .addTag('Admin')
     .addTag('Organization / Clinic')
     .addTag('Doctor')

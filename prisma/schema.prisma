@@ -34,7 +34,7 @@ model Organization {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  room Room[]
+  appointments Appointment[]
 
   @@map("organization")
 }
@@ -52,7 +52,7 @@ model Doctor {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  room Room[]
+  appointments Appointment[]
 
   @@map("doctor")
 }
@@ -70,12 +70,12 @@ model Patient {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  room Room[]
+  appointments Appointment[]
 
   @@map("patient")
 }
 
-model Room {
+model Appointment {
   id String @id @unique @default(uuid())
 
   open Boolean @default(true)
@@ -95,5 +95,5 @@ model Room {
 
   appointmentTime DateTime
 
-  @@map("room")
+  @@map("appointment")
 }

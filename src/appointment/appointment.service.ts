@@ -1,22 +1,24 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Doctor, Organization, Patient, Room } from '@prisma/client';
+import { Doctor, Organization, Patient, Appointment } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateRoomDto } from './dto/create-room.dto';
-import { UpdateRoomDto } from './dto/update-room.dto';
+import { CreateAppointmentDto } from './dto/create-appointment.dto';
+import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { getTwilioToken } from './get.twilio.token.service';
 
 @Injectable()
-export class RoomService {
+export class AppointmentService {
   constructor(private prisma: PrismaService) {}
 
   async create(
-    data: CreateRoomDto,
+    data: CreateAppointmentDto,
     user: Organization | Doctor | Patient,
-  ): Promise<Room> {
+  ): Promise<Appointment> {
     const { patientId, doctorId, organizationId } = data;
 
     if (user.id === patientId || doctorId || organizationId) {
-      const scheduledAppointment = await this.prisma.room.create({ data });
+      const scheduledAppointment = await this.prisma.appointment.create({
+        data,
+      });
       return scheduledAppointment;
     }
 
@@ -26,15 +28,19 @@ export class RoomService {
   }
 
   async findOne(
-    roomId: string,
+    appointmentId: string,
     user: Organization | Doctor | Patient,
-  ): Promise<Room> {
-    const room = await this.prisma.room.findUniqueOrThrow({
-      where: { id: roomId },
+  ): Promise<Appointment> {
+    const appointment = await this.prisma.appointment.findUniqueOrThrow({
+      where: { id: appointmentId },
     });
 
-    if (user.id === room.patientId || room.doctorId || room.organizationId) {
-      return room;
+    if (
+      user.id === appointment.patientId ||
+      appointment.doctorId ||
+      appointment.organizationId
+    ) {
+      return appointment;
     }
 
     throw new UnauthorizedException(
@@ -44,21 +50,21 @@ export class RoomService {
 
   async findAll(
     user: Organization | Doctor | Patient,
-  ): Promise<Room[] | Room | string> {
+  ): Promise<Appointment[] | Appointment | string> {
     if (user.role === 'organization') {
-      return await this.prisma.room.findMany({
+      return await this.prisma.appointment.findMany({
         where: { organizationId: user.id },
       });
     }
 
     if (user.role === 'doctor') {
-      return await this.prisma.room.findMany({
+      return await this.prisma.appointment.findMany({
         where: { doctorId: user.id },
       });
     }
 
     if (user.role === 'patient') {
-      return await this.prisma.room.findMany({
+      return await this.prisma.appointment.findMany({
         where: { patientId: user.id },
       });
     }
@@ -68,7 +74,7 @@ export class RoomService {
     );
   }
 
-  async connect(roomId: string, user: Patient | Doctor) {
+  async connect(appointmentId: string, user: Patient | Doctor) {
     const {
       doctorId,
       doctorVideoToken,
@@ -76,7 +82,7 @@ export class RoomService {
       patientId,
       patientVideoToken,
       patientChatToken,
-    } = await this.findOne(roomId, user);
+    } = await this.findOne(appointmentId, user);
 
     if (user.id === doctorId) {
       if (doctorVideoToken && doctorChatToken) {
@@ -84,11 +90,14 @@ export class RoomService {
         const chatToken = doctorChatToken;
         return { videoToken, chatToken };
       } else {
-        const { videoToken, chatToken } = await getTwilioToken(user, roomId);
+        const { videoToken, chatToken } = await getTwilioToken(
+          user,
+          appointmentId,
+        );
         const doctorVideoToken = videoToken;
         const doctorChatToken = chatToken;
-        const updateRoom = { doctorVideoToken, doctorChatToken };
-        await this.update(roomId, user, updateRoom);
+        const updateAppointment = { doctorVideoToken, doctorChatToken };
+        await this.update(appointmentId, user, updateAppointment);
         return { videoToken, chatToken };
       }
     }
@@ -99,11 +108,14 @@ export class RoomService {
         const chatToken = patientChatToken;
         return { videoToken, chatToken };
       } else {
-        const { videoToken, chatToken } = await getTwilioToken(user, roomId);
+        const { videoToken, chatToken } = await getTwilioToken(
+          user,
+          appointmentId,
+        );
         const patientVideoToken = videoToken;
         const patientChatToken = chatToken;
-        const updateRoom = { patientVideoToken, patientChatToken };
-        await this.update(roomId, user, updateRoom);
+        const updateAppointment = { patientVideoToken, patientChatToken };
+        await this.update(appointmentId, user, updateAppointment);
         return { videoToken, chatToken };
       }
     }
@@ -114,16 +126,19 @@ export class RoomService {
   }
 
   async update(
-    roomId: string,
+    appointmentId: string,
     user: Organization | Doctor | Patient,
-    updateRoom?: UpdateRoomDto,
+    updateAppointment?: UpdateAppointmentDto,
   ) {
-    await this.findOne(roomId, user);
-    const data = { ...updateRoom };
-    await this.prisma.room.update({ data, where: { id: roomId } });
+    await this.findOne(appointmentId, user);
+    const data = { ...updateAppointment };
+    await this.prisma.appointment.update({
+      data,
+      where: { id: appointmentId },
+    });
   }
 
   remove(id: string) {
-    return `This action removes a #${id} room`;
+    return `This action removes a #${id} appointment`;
   }
 }
