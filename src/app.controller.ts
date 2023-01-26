@@ -12,6 +12,6 @@ export class AppController {
     summary: 'View application status',
   })
   getStatus() {
-    return this.appService.getStatus(process.env.ENV_URL);
+    return this.appService.getStatus(process.env.ENV_URL);    
   }
 }
