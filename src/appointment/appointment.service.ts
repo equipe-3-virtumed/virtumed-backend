@@ -3,7 +3,7 @@ import { Doctor, Organization, Patient, Appointment } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
-import { getTwilioToken } from './get.twilio.token.service';
+import { getToken } from './get.token.service';
 
 @Injectable()
 export class AppointmentService {
@@ -90,7 +90,7 @@ export class AppointmentService {
         const chatToken = doctorChatToken;
         return { videoToken, chatToken };
       } else {
-        const { videoToken, chatToken } = await getTwilioToken(
+        const { videoToken, chatToken } = await getToken(
           user,
           appointmentId,
         );
@@ -108,7 +108,7 @@ export class AppointmentService {
         const chatToken = patientChatToken;
         return { videoToken, chatToken };
       } else {
-        const { videoToken, chatToken } = await getTwilioToken(
+        const { videoToken, chatToken } = await getToken(
           user,
           appointmentId,
         );
