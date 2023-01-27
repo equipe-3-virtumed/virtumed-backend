@@ -3,11 +3,14 @@ import { Doctor, Organization, Patient, Appointment } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
-import { getToken } from './get.token.service';
+import { GetTokenService } from './get.token.service';
 
 @Injectable()
 export class AppointmentService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly getToken: GetTokenService,
+  ) {}
 
   async create(
     data: CreateAppointmentDto,
@@ -88,17 +91,14 @@ export class AppointmentService {
       if (doctorVideoToken && doctorChatToken) {
         const videoToken = doctorVideoToken;
         const chatToken = doctorChatToken;
-        return { videoToken, chatToken };
+        return { videoToken, appointmentId }
       } else {
-        const { videoToken, chatToken } = await getToken(
-          user,
-          appointmentId,
-        );
+        const videoToken = await this.getToken.GetToken(user, appointmentId);
         const doctorVideoToken = videoToken;
-        const doctorChatToken = chatToken;
+        // const doctorChatToken = chatToken;
         const updateAppointment = { doctorVideoToken, doctorChatToken };
-        await this.update(appointmentId, user, updateAppointment);
-        return { videoToken, chatToken };
+        // await this.update(appointmentId, user, updateAppointment);
+        return { videoToken, appointmentId }
       }
     }
 
@@ -106,17 +106,14 @@ export class AppointmentService {
       if (patientVideoToken && patientChatToken) {
         const videoToken = patientVideoToken;
         const chatToken = patientChatToken;
-        return { videoToken, chatToken };
+        return { videoToken, appointmentId }
       } else {
-        const { videoToken, chatToken } = await getToken(
-          user,
-          appointmentId,
-        );
+        const videoToken = await this.getToken.GetToken(user, appointmentId);
         const patientVideoToken = videoToken;
-        const patientChatToken = chatToken;
+        // const patientChatToken = chatToken;
         const updateAppointment = { patientVideoToken, patientChatToken };
-        await this.update(appointmentId, user, updateAppointment);
-        return { videoToken, chatToken };
+        // await this.update(appointmentId, user, updateAppointment);
+        return { videoToken, appointmentId }
       }
     }
 
