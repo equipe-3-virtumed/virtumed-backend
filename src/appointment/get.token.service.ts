@@ -1,6 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-// import { JwtService } from '@nestjs/jwt';
-import { Patient, Doctor } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import fetch from 'node-fetch';
 
@@ -11,8 +9,7 @@ interface Token {
 
 @Injectable()
 export class GetTokenService {
-  // constructor(private readonly jwtService: JwtService) {}
-  
+
   async GetToken(appointmentId: string): Promise<Token> {
     const options: SignOptions = { expiresIn: '2h', algorithm: 'HS256' };
 
@@ -37,7 +34,7 @@ export class GetTokenService {
     };
     const url= `https://api.videosdk.live/v2/rooms`;
     const response = await fetch(url, tokenOptions);
-    const data = await response.json();
+    const data: any = await response.json();
     const roomId: string = data.roomId;
 
     return { roomId, videoToken };

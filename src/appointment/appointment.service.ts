@@ -18,7 +18,11 @@ export class AppointmentService {
   ): Promise<Appointment> {
     const { patientId, doctorId, organizationId } = data;
 
-    if (user.id === patientId || doctorId || organizationId) {
+    if (
+      user.id === patientId ||
+      user.id === doctorId ||
+      user.id === organizationId
+    ) {
       const scheduledAppointment = await this.prisma.appointment.create({
         data,
       });
@@ -40,14 +44,14 @@ export class AppointmentService {
 
     if (
       user.id === appointment.patientId ||
-      appointment.doctorId ||
-      appointment.organizationId
+      user.id === appointment.doctorId ||
+      user.id === appointment.organizationId
     ) {
       return appointment;
     }
 
     throw new UnauthorizedException(
-      'You cannot view or create an appointment to another patient or a patient outside your organization',
+      'FIND ONE You cannot view or create an appointment to another patient or a patient outside your organization',
     );
   }
 
@@ -78,37 +82,36 @@ export class AppointmentService {
   }
 
   async connect(appointmentId: string, user: Patient | Doctor) {
-    const {
-      doctorId,
-      doctorVideoToken,
-      patientId,
-      patientVideoToken,
-      roomId
-    } = await this.findOne(appointmentId, user);
+    const { doctorId, doctorVideoToken, patientId, patientVideoToken, roomId } =
+      await this.findOne(appointmentId, user);
 
     if (user.id === doctorId) {
       if (doctorVideoToken) {
         const videoToken = doctorVideoToken;
-        return { videoToken, roomId }
+        return { videoToken, roomId };
       } else {
-        const { roomId, videoToken } = await this.getToken.GetToken(appointmentId);
+        const { roomId, videoToken } = await this.getToken.GetToken(
+          appointmentId,
+        );
         const doctorVideoToken = videoToken;
         const updateAppointment = { doctorVideoToken, roomId };
         await this.update(appointmentId, user, updateAppointment);
-        return { videoToken, roomId }
+        return { videoToken, roomId };
       }
     }
 
     if (user.id === patientId) {
       if (patientVideoToken) {
         const videoToken = patientVideoToken;
-        return { videoToken, roomId }
+        return { videoToken, roomId };
       } else {
-        const { roomId, videoToken } = await this.getToken.GetToken(appointmentId);
+        const { roomId, videoToken } = await this.getToken.GetToken(
+          appointmentId,
+        );
         const patientVideoToken = videoToken;
         const updateAppointment = { patientVideoToken, roomId };
         await this.update(appointmentId, user, updateAppointment);
-        return { videoToken, roomId }
+        return { videoToken, roomId };
       }
     }
 
