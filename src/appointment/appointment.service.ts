@@ -3,11 +3,14 @@ import { Doctor, Organization, Patient, Appointment } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
-import { getToken } from './get.token.service';
+import { GetTokenService } from './get.token.service';
 
 @Injectable()
 export class AppointmentService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly getToken: GetTokenService,
+  ) {}
 
   async create(
     data: CreateAppointmentDto,
@@ -15,7 +18,11 @@ export class AppointmentService {
   ): Promise<Appointment> {
     const { patientId, doctorId, organizationId } = data;
 
-    if (user.id === patientId || doctorId || organizationId) {
+    if (
+      user.id === patientId ||
+      user.id === doctorId ||
+      user.id === organizationId
+    ) {
       const scheduledAppointment = await this.prisma.appointment.create({
         data,
       });
@@ -37,14 +44,14 @@ export class AppointmentService {
 
     if (
       user.id === appointment.patientId ||
-      appointment.doctorId ||
-      appointment.organizationId
+      user.id === appointment.doctorId ||
+      user.id === appointment.organizationId
     ) {
       return appointment;
     }
 
     throw new UnauthorizedException(
-      'You cannot view or create an appointment to another patient or a patient outside your organization',
+      'FIND ONE You cannot view or create an appointment to another patient or a patient outside your organization',
     );
   }
 
@@ -75,48 +82,36 @@ export class AppointmentService {
   }
 
   async connect(appointmentId: string, user: Patient | Doctor) {
-    const {
-      doctorId,
-      doctorVideoToken,
-      doctorChatToken,
-      patientId,
-      patientVideoToken,
-      patientChatToken,
-    } = await this.findOne(appointmentId, user);
+    const { doctorId, doctorVideoToken, patientId, patientVideoToken, roomId } =
+      await this.findOne(appointmentId, user);
 
     if (user.id === doctorId) {
-      if (doctorVideoToken && doctorChatToken) {
+      if (doctorVideoToken) {
         const videoToken = doctorVideoToken;
-        const chatToken = doctorChatToken;
-        return { videoToken, chatToken };
+        return { videoToken, roomId };
       } else {
-        const { videoToken, chatToken } = await getToken(
-          user,
+        const { roomId, videoToken } = await this.getToken.GetToken(
           appointmentId,
         );
         const doctorVideoToken = videoToken;
-        const doctorChatToken = chatToken;
-        const updateAppointment = { doctorVideoToken, doctorChatToken };
+        const updateAppointment = { doctorVideoToken, roomId };
         await this.update(appointmentId, user, updateAppointment);
-        return { videoToken, chatToken };
+        return { videoToken, roomId };
       }
     }
 
     if (user.id === patientId) {
-      if (patientVideoToken && patientChatToken) {
+      if (patientVideoToken) {
         const videoToken = patientVideoToken;
-        const chatToken = patientChatToken;
-        return { videoToken, chatToken };
+        return { videoToken, roomId };
       } else {
-        const { videoToken, chatToken } = await getToken(
-          user,
+        const { roomId, videoToken } = await this.getToken.GetToken(
           appointmentId,
         );
         const patientVideoToken = videoToken;
-        const patientChatToken = chatToken;
-        const updateAppointment = { patientVideoToken, patientChatToken };
+        const updateAppointment = { patientVideoToken, roomId };
         await this.update(appointmentId, user, updateAppointment);
-        return { videoToken, chatToken };
+        return { videoToken, roomId };
       }
     }
 
