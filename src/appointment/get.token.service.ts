@@ -1,18 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import jwt, { SignOptions } from 'jsonwebtoken';
-import fetch from 'node-fetch';
-
-interface Token {
-  roomId: string;
-  videoToken: string;
-}
 
 @Injectable()
 export class GetTokenService {
 
-  async GetToken(appointmentId: string): Promise<Token> {
+  async GetToken(appointmentId: string): Promise<string> {
     const options: SignOptions = { expiresIn: '2h', algorithm: 'HS256' };
 
+    console.log("🚀 ~ file: get.token.service.ts:10 ~ GetTokenService ~ GetToken ~ options", options)
     const payload = {
       apikey: process.env.API_KEY_VIDEOSDK,
       permissions: ['allow_join'],
@@ -24,19 +19,19 @@ export class GetTokenService {
       options,
     );
 
-    const tokenOptions = {
-      method: "POST",
-      headers: {
-        "Authorization": `${videoToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({"region" : "sg001", "customRoomId" : `${appointmentId}`}),
-    };
-    const url= `https://api.videosdk.live/v2/rooms`;
-    const response = await fetch(url, tokenOptions);
-    const data: any = await response.json();
-    const roomId: string = data.roomId;
+    // const tokenOptions = {
+    //   method: "POST",
+    //   headers: {
+    //     "Authorization": `${videoToken}`,
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({"region" : "sg001", "customRoomId" : `${appointmentId}`}),
+    // };
+    // const url= `https://api.videosdk.live/v2/rooms`;
+    // const response = (url, tokenOptions);
+    // const data: any = await response.json();
+    // const roomId: string = data.roomId;
 
-    return { roomId, videoToken };
+    return videoToken;
   }
 }

@@ -80,8 +80,6 @@ model Appointment {
 
   open Boolean @default(true)
 
-  roomId String?
-
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 

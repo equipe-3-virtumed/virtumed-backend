@@ -4,8 +4,6 @@ export class Appointment {
   organizationId: string;
   doctorId: string;
   doctorVideoToken?: string;
-  doctorChatToken?: string;
   patientId: string;
   patientVideoToken?: string;
-  patientChatToken?: string;
 }

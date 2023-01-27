@@ -82,36 +82,30 @@ export class AppointmentService {
   }
 
   async connect(appointmentId: string, user: Patient | Doctor) {
-    const { doctorId, doctorVideoToken, patientId, patientVideoToken, roomId } =
+    const { doctorId, doctorVideoToken, patientId, patientVideoToken } =
       await this.findOne(appointmentId, user);
 
     if (user.id === doctorId) {
       if (doctorVideoToken) {
         const videoToken = doctorVideoToken;
-        return { videoToken, roomId };
+        return videoToken;
       } else {
-        const { roomId, videoToken } = await this.getToken.GetToken(
-          appointmentId,
-        );
+        const videoToken = await this.getToken.GetToken(appointmentId);
         const doctorVideoToken = videoToken;
-        const updateAppointment = { doctorVideoToken, roomId };
-        await this.update(appointmentId, user, updateAppointment);
-        return { videoToken, roomId };
+        await this.update(appointmentId, user, { doctorVideoToken });
+        return videoToken;
       }
     }
 
     if (user.id === patientId) {
       if (patientVideoToken) {
         const videoToken = patientVideoToken;
-        return { videoToken, roomId };
+        return videoToken;
       } else {
-        const { roomId, videoToken } = await this.getToken.GetToken(
-          appointmentId,
-        );
+        const videoToken = await this.getToken.GetToken(appointmentId);
         const patientVideoToken = videoToken;
-        const updateAppointment = { patientVideoToken, roomId };
-        await this.update(appointmentId, user, updateAppointment);
-        return { videoToken, roomId };
+        await this.update(appointmentId, user, { patientVideoToken });
+        return videoToken;
       }
     }
 
