@@ -4,11 +4,16 @@ import { Patient, Doctor } from '@prisma/client';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import fetch from 'node-fetch';
 
+interface Token {
+  roomId: string;
+  videoToken: string;
+}
+
 @Injectable()
 export class GetTokenService {
   // constructor(private readonly jwtService: JwtService) {}
-
-  async GetToken(user: Patient | Doctor, appointmentId: string): Promise<string> {
+  
+  async GetToken(appointmentId: string): Promise<Token> {
     const options: SignOptions = { expiresIn: '2h', algorithm: 'HS256' };
 
     const payload = {
@@ -33,10 +38,8 @@ export class GetTokenService {
     const url= `https://api.videosdk.live/v2/rooms`;
     const response = await fetch(url, tokenOptions);
     const data = await response.json();
-    console.log("🚀 ~ file: get.token.service.ts:36 ~ GetTokenService ~ GetToken ~ data", data)
+    const roomId: string = data.roomId;
 
-    return data;
+    return { roomId, videoToken };
   }
 }
-
-

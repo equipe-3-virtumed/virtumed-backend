@@ -81,39 +81,34 @@ export class AppointmentService {
     const {
       doctorId,
       doctorVideoToken,
-      doctorChatToken,
       patientId,
       patientVideoToken,
-      patientChatToken,
+      roomId
     } = await this.findOne(appointmentId, user);
 
     if (user.id === doctorId) {
-      if (doctorVideoToken && doctorChatToken) {
+      if (doctorVideoToken) {
         const videoToken = doctorVideoToken;
-        const chatToken = doctorChatToken;
-        return { videoToken, appointmentId }
+        return { videoToken, roomId }
       } else {
-        const videoToken = await this.getToken.GetToken(user, appointmentId);
+        const { roomId, videoToken } = await this.getToken.GetToken(appointmentId);
         const doctorVideoToken = videoToken;
-        // const doctorChatToken = chatToken;
-        const updateAppointment = { doctorVideoToken, doctorChatToken };
-        // await this.update(appointmentId, user, updateAppointment);
-        return { videoToken, appointmentId }
+        const updateAppointment = { doctorVideoToken, roomId };
+        await this.update(appointmentId, user, updateAppointment);
+        return { videoToken, roomId }
       }
     }
 
     if (user.id === patientId) {
-      if (patientVideoToken && patientChatToken) {
+      if (patientVideoToken) {
         const videoToken = patientVideoToken;
-        const chatToken = patientChatToken;
-        return { videoToken, appointmentId }
+        return { videoToken, roomId }
       } else {
-        const videoToken = await this.getToken.GetToken(user, appointmentId);
+        const { roomId, videoToken } = await this.getToken.GetToken(appointmentId);
         const patientVideoToken = videoToken;
-        // const patientChatToken = chatToken;
-        const updateAppointment = { patientVideoToken, patientChatToken };
-        // await this.update(appointmentId, user, updateAppointment);
-        return { videoToken, appointmentId }
+        const updateAppointment = { patientVideoToken, roomId };
+        await this.update(appointmentId, user, updateAppointment);
+        return { videoToken, roomId }
       }
     }
 

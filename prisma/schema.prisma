@@ -80,18 +80,18 @@ model Appointment {
 
   open Boolean @default(true)
 
+  roomId String?
+
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   doctorId         String
   doctor           Doctor  @relation(fields: [doctorId], references: [id])
   doctorVideoToken String?
-  doctorChatToken  String?
 
   patientId         String
   patient           Patient @relation(fields: [patientId], references: [id])
   patientVideoToken String?
-  patientChatToken  String?
 
   appointmentTime DateTime
 
