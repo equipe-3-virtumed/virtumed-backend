@@ -17,7 +17,7 @@ export class SocketAdapter extends IoAdapter {
     const server = super.createIOServer(port, {
       ...options,
       cors: {
-        origin: process.env.FRONT_URL,
+        origin: '*',
         methods: ['GET', 'POST'],
       },
     });
@@ -27,9 +27,7 @@ export class SocketAdapter extends IoAdapter {
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: {
-      origin: process.env.FRONT_URL,
-    },
+    cors: true,
   });
 
   app.useGlobalPipes(new ValidationPipe());
