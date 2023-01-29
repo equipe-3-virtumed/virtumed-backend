@@ -7,7 +7,6 @@ export class GetTokenService {
   async GetToken(appointmentId: string): Promise<string> {
     const options: SignOptions = { expiresIn: '2h', algorithm: 'HS256' };
 
-    console.log("🚀 ~ file: get.token.service.ts:10 ~ GetTokenService ~ GetToken ~ options", options)
     const payload = {
       apikey: process.env.API_KEY_VIDEOSDK,
       permissions: ['allow_join'],

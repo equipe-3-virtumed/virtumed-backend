@@ -25,15 +25,6 @@ export class ChatGateway implements OnGatewayInit {
 
   @SubscribeMessage('joinRoom')
   handleRoomJoin(client: Socket, room: string) {
-    console.log(
-      '🚀 ~ file: chat.gateway.ts:28 ~ ChatGateway ~ handleRoomJoin ~ client',
-      client.rooms,
-    );
-    console.log(
-      '🚀 ~ file: chat.gateway.ts:28 ~ ChatGateway ~ handleRoomJoin ~ room',
-      room,
-    );
-
     client.join(room);
     client.emit('joinedRoom', room);
   }
@@ -43,9 +34,6 @@ export class ChatGateway implements OnGatewayInit {
     client: Socket,
     message: { sender: string; room: string; message: string; time: string },
   ) {
-    console.log(message.room);
-    console.log(message);
-    console.log(message.time);
     this.wss.to(message.room).emit('chatToClient', message);
   }
 
