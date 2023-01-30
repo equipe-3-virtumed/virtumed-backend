@@ -83,13 +83,11 @@ model Appointment {
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
-  doctorId         String
-  doctor           Doctor  @relation(fields: [doctorId], references: [id])
-  doctorVideoToken String?
+  doctorId String
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
 
-  patientId         String
-  patient           Patient @relation(fields: [patientId], references: [id])
-  patientVideoToken String?
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id])
 
   appointmentTime DateTime
 

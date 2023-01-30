@@ -3,14 +3,10 @@ import { Doctor, Organization, Patient, Appointment } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
-import { GetTokenService } from './get.token.service';
 
 @Injectable()
 export class AppointmentService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly getToken: GetTokenService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(
     data: CreateAppointmentDto,
@@ -81,32 +77,19 @@ export class AppointmentService {
     );
   }
 
-  async connect(appointmentId: string, user: Patient | Doctor) {
-    const { doctorId, doctorVideoToken, patientId, patientVideoToken } =
+  async connect(
+    appointmentId: string,
+    user: Patient | Doctor,
+  ): Promise<boolean> {
+    const { doctorId, patientId } =
       await this.findOne(appointmentId, user);
 
     if (user.id === doctorId) {
-      if (doctorVideoToken) {
-        const videoToken = doctorVideoToken;
-        return videoToken;
-      } else {
-        const videoToken = await this.getToken.GetToken(appointmentId);
-        const doctorVideoToken = videoToken;
-        await this.update(appointmentId, user, { doctorVideoToken });
-        return videoToken;
-      }
+      return true;
     }
 
     if (user.id === patientId) {
-      if (patientVideoToken) {
-        const videoToken = patientVideoToken;
-        return videoToken;
-      } else {
-        const videoToken = await this.getToken.GetToken(appointmentId);
-        const patientVideoToken = videoToken;
-        await this.update(appointmentId, user, { patientVideoToken });
-        return videoToken;
-      }
+      return true;
     }
 
     throw new UnauthorizedException(

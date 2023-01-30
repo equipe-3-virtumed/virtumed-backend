@@ -51,7 +51,7 @@ export class AppointmentController {
   async connect(
     @Param('appointmentId') appointmentId: string,
     @LoggedUser() user: Patient | Doctor,
-  ) {
+  ): Promise<boolean> {
     return await this.appointmentService.connect(appointmentId, user);
   }
 
