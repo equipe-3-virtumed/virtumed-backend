@@ -7,7 +7,8 @@ import { DoctorModule } from './doctor/doctor.module';
 import { PatientModule } from './patient/patient.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { RoomModule } from './room/room.module';
+import { AppointmentModule } from './appointment/appointment.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { RoomModule } from './room/room.module';
     DoctorModule,
     PatientModule,
     AuthModule,
-    RoomModule,
+    AppointmentModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

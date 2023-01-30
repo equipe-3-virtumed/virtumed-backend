@@ -40,7 +40,6 @@ export class AuthController {
   })
   @ApiBearerAuth()
   profile(@LoggedUser() user: Admin | Doctor | Organization | Patient) {
-    console.log("🚀 ~ file: auth.controller.ts:43 ~ AuthController ~ profile ~ user", user)
     return user;
   }
 }

@@ -34,7 +34,7 @@ model Organization {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  room Room[]
+  appointments Appointment[]
 
   @@map("organization")
 }
@@ -52,7 +52,7 @@ model Doctor {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  room Room[]
+  appointments Appointment[]
 
   @@map("doctor")
 }
@@ -70,12 +70,12 @@ model Patient {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  room Room[]
+  appointments Appointment[]
 
   @@map("patient")
 }
 
-model Room {
+model Appointment {
   id String @id @unique @default(uuid())
 
   open Boolean @default(true)
@@ -86,14 +86,12 @@ model Room {
   doctorId         String
   doctor           Doctor  @relation(fields: [doctorId], references: [id])
   doctorVideoToken String?
-  doctorChatToken  String?
 
   patientId         String
   patient           Patient @relation(fields: [patientId], references: [id])
   patientVideoToken String?
-  patientChatToken  String?
 
   appointmentTime DateTime
 
-  @@map("room")
+  @@map("appointment")
 }
