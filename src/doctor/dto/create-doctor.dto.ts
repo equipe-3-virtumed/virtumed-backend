@@ -27,9 +27,9 @@ export class CreateDoctorDto {
   //PHONE NUMBER
   @ApiProperty({
     description: "Doctor's phone",
-    example: "+5511912345678",
-  })
-  // @IsMobilePhone('pt-BR')
+    example: "+5577971141667",
+  })  
+  @Matches(/^((\+?55\ ?[1-9]{2}\ ?)|(0[1-9]{2}\ ?)|(\([1-9]{2}\)\ ?)|([1-9]{2}\ ?))((\d{4}\-?\d{4})|(9[6-9]{1}\d{3}\-?\d{4}))$/)
   phone: string;
 
   // LOGIN
