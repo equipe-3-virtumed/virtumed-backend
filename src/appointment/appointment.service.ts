@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Doctor, Organization, Patient, Appointment } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
@@ -34,9 +38,11 @@ export class AppointmentService {
     appointmentId: string,
     user: Organization | Doctor | Patient,
   ): Promise<Appointment> {
-    const appointment = await this.prisma.appointment.findUniqueOrThrow({
+    const appointment = await this.prisma.appointment.findUnique({
       where: { id: appointmentId },
     });
+
+    if (!appointment) throw new NotFoundException('Appointment not found');
 
     if (
       user.id === appointment.patientId ||
@@ -81,8 +87,7 @@ export class AppointmentService {
     appointmentId: string,
     user: Patient | Doctor,
   ): Promise<boolean> {
-    const { doctorId, patientId } =
-      await this.findOne(appointmentId, user);
+    const { doctorId, patientId } = await this.findOne(appointmentId, user);
 
     if (user.id === doctorId) {
       return true;
