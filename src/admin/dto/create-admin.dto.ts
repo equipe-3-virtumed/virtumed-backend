@@ -17,14 +17,6 @@ export class CreateAdminDto {
   @IsString()
   @IsNotEmpty()
   name: string;
-  
-  //PHONE NUMBER
-  @ApiProperty({
-    description: "Admin's phone",
-    example: "+5577991747578",
-  })  
-  @Matches(/^((\+?55\ ?[1-9]{2}\ ?)|(0[1-9]{2}\ ?)|(\([1-9]{2}\)\ ?)|([1-9]{2}\ ?))((\d{4}\-?\d{4})|(9[6-9]{1}\d{3}\-?\d{4}))$/)
-  phone: string;
 
   // LOGIN
   @ApiProperty({
