@@ -15,6 +15,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { LoggedUser } from 'src/auth/strategies/logged.decorator';
 import { Doctor, Organization, Patient, Appointment } from '@prisma/client';
+import { JoinAppointment } from "./entities/appointment.entity";
 
 @ApiTags('Appointment')
 @ApiBearerAuth()
@@ -51,7 +52,7 @@ export class AppointmentController {
   async connect(
     @Param('appointmentId') appointmentId: string,
     @LoggedUser() user: Patient | Doctor,
-  ): Promise<boolean> {
+  ): Promise<JoinAppointment> {
     return await this.appointmentService.connect(appointmentId, user);
   }
 

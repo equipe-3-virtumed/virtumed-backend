@@ -4,13 +4,20 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Doctor, Organization, Patient, Appointment } from '@prisma/client';
+import { DoctorService } from "src/doctor/doctor.service";
+import { PatientService } from 'src/patient/patient.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { JoinAppointment } from "./entities/appointment.entity";
 
 @Injectable()
 export class AppointmentService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly patientService: PatientService,
+    private readonly doctorService: DoctorService,
+  ) {}
 
   async create(
     data: CreateAppointmentDto,
@@ -86,15 +93,19 @@ export class AppointmentService {
   async connect(
     appointmentId: string,
     user: Patient | Doctor,
-  ): Promise<boolean> {
-    const { doctorId, patientId } = await this.findOne(appointmentId, user);
+  ): Promise<JoinAppointment> {
+    const appointment = await this.findOne(appointmentId, user);
 
-    if (user.id === doctorId) {
-      return true;
+    if (user.id === appointment.doctorId) {
+      const patient = await this.patientService.findById(appointment.patientId);
+      const doctor = await this.doctorService.findById(appointment.doctorId);
+      return { appointment, patient, doctor, userRole: 'doctor' };
     }
 
-    if (user.id === patientId) {
-      return true;
+    if (user.id === appointment.patientId) {
+      const patient = await this.patientService.findById(appointment.patientId);
+      const doctor = await this.doctorService.findById(appointment.doctorId);
+      return { appointment, patient, doctor, userRole: 'patient' };
     }
 
     throw new UnauthorizedException(
