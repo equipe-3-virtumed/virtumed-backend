@@ -25,7 +25,6 @@ export class ChatGateway implements OnGatewayInit {
 
   @SubscribeMessage('ready')
   handleReady(client: Socket, credentials: { roomId: string; localParticipant: string }) {
-    console.log("🚀 ~ file: chat.gateway.ts:28 ~ ChatGateway ~ handleReady ~ credentials", credentials)
     this.wss.to(credentials.roomId).emit('readyToGo', credentials.localParticipant);
   }
 
