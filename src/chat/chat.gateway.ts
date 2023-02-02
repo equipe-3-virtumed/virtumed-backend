@@ -41,7 +41,7 @@ export class ChatGateway implements OnGatewayInit {
 
   @SubscribeMessage('videoRequest')
   handleStream(client: Socket, data: { room: string; signal: any; }) {
-    console.log("🚀 ~ file: chat.gateway.ts:44 ~ ChatGateway ~ handleStream ~ data", data);
+    // console.log("🚀 ~ file: chat.gateway.ts:44 ~ ChatGateway ~ handleStream ~ data", data);
     const { signal } = data;
     const { id } = client;
     const stream = { signal, id}
