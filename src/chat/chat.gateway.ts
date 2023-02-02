@@ -23,22 +23,6 @@ export class ChatGateway implements OnGatewayInit {
     client.emit('joinedRoom', client.id);
   }
 
-  @SubscribeMessage('ready')
-  handleReady(
-    client: Socket,
-    data: { roomId: string; localParticipant: string },
-  ) {
-    this.wss.to(data.roomId).emit('readyToGo');
-  }
-
-  @SubscribeMessage('idExchange')
-  handleIds(
-    client: Socket,
-    room: string
-  ) {
-    this.wss.to(room).emit('idExchange', client.id)
-  }
-
   @SubscribeMessage('chatToServer')
   handleMessage(message: {
     sender: string;
@@ -49,12 +33,6 @@ export class ChatGateway implements OnGatewayInit {
     this.wss.to(message.room).emit('chatToClient', message);
   }
 
-  @SubscribeMessage('videoRequest')
-  handleRequest(client: Socket, data: { room: string; signal: any }) {
-    console.log("🚀 ~ file: chat.gateway.ts:46 ~ ChatGateway ~ handleStream ~ data", data)
-    const { signal } = data;
-    const { id } = client;
-    const stream = { signal, id };
-    this.wss.to(data.room).emit('videoRequest', stream);
-  }
+  
+
 }
