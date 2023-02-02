@@ -18,9 +18,9 @@ export class ChatGateway implements OnGatewayInit {
   }
 
   @SubscribeMessage('joinRoom')
-  handleRoomJoin(client: Socket, room: string) {
-    client.join(room);
-    client.emit('joinedRoom', client.id);
+  handleRoomJoin(socket: Socket, room: string) {
+    socket.join(room);
+    socket.emit('joinedRoom', socket.id);
   }
 
   @SubscribeMessage('chatToServer')
@@ -33,6 +33,25 @@ export class ChatGateway implements OnGatewayInit {
     this.wss.to(message.room).emit('chatToClient', message);
   }
 
-  
+  @SubscribeMessage('emitId')
+  getId(socket: Socket, room: string) {
+    this.wss.to(room).emit('emitId', socket.id)
+  }
 
+  @SubscribeMessage('disconnect')
+  handleDisconnect(socket: Socket) {
+    socket.broadcast.emit('callended');
+  }
+
+  @SubscribeMessage('calluser')
+  callUser({ userToCall, signalData, from, name }) {
+    this.wss
+      .to(userToCall)
+      .emit('calluser', { signal: signalData, from, name });
+  }
+
+  @SubscribeMessage('answercall')
+  answerCall(data) {
+    this.wss.to(data.to).emit('callaccepted', data.signal);
+  }
 }
