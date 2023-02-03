@@ -24,12 +24,15 @@ export class ChatGateway implements OnGatewayInit {
   }
 
   @SubscribeMessage('chatToServer')
-  handleMessage(message: {
-    sender: string;
-    room: string;
-    message: string;
-    time: string;
-  }) {
+  handleMessage(
+    socket: Socket,
+    message: {
+      sender: string;
+      room: string;
+      message: string;
+      time: string;
+    },
+  ) {
     this.wss.to(message.room).emit('chatToClient', message);
   }
 
