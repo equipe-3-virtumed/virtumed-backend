@@ -37,19 +37,19 @@ export class ChatGateway implements OnGatewayInit {
   getId(socket: Socket, room: string) {
     this.wss.to(room).emit('emittedId', socket.id);
   }
-  
+
   @SubscribeMessage('roomReady')
   setReady(socket: Socket, room: string) {
-    this.wss.to(room).emit('roomReady')
+    this.wss.to(room).emit('roomReady');
   }
-  
+
   @SubscribeMessage('calluser')
-  callUser(socket: Socket, callData: { userToCall: string; signalData: any; }) {
+  callUser(socket: Socket, callData: { userToCall: string; signalData: any }) {
     this.wss
-    .to(callData.userToCall)
-    .emit('usercalling', { signal: callData.signalData, from: socket.id });
+      .to(callData.userToCall)
+      .emit('usercalling', { signal: callData.signalData, from: socket.id });
   }
-  
+
   @SubscribeMessage('answercall')
   answerCall(socket: Socket, { signal, to }) {
     this.wss.to(to).emit('callaccepted', signal);
