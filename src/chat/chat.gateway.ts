@@ -18,15 +18,9 @@ export class ChatGateway implements OnGatewayInit {
   }
 
   @SubscribeMessage('joinRoom')
-  handleRoomJoin(client: Socket, room: string) {
-    client.join(room);
-    // console.log("🚀 ~ file: chat.gateway.ts:23 ~ ChatGateway ~ handleRoomJoin ~ room", room)
-    client.emit('joinedRoom', client.id);
-  }
-
-  @SubscribeMessage('ready')
-  handleReady(client: Socket, credentials: { roomId: string; localParticipant: string }) {
-    this.wss.to(credentials.roomId).emit('readyToGo', credentials.localParticipant);
+  handleRoomJoin(socket: Socket, room: string) {
+    socket.join(room);
+    socket.emit('joinedRoom', socket.id);
   }
 
   @SubscribeMessage('chatToServer')
@@ -39,12 +33,30 @@ export class ChatGateway implements OnGatewayInit {
     this.wss.to(message.room).emit('chatToClient', message);
   }
 
-  @SubscribeMessage('videoRequest')
-  handleStream(client: Socket, data: { room: string; signal: any; }) {
-    // console.log("🚀 ~ file: chat.gateway.ts:44 ~ ChatGateway ~ handleStream ~ data", data);
-    const { signal } = data;
-    const { id } = client;
-    const stream = { signal, id}
-    this.wss.to(data.room).emit('videoStream', stream);
+  @SubscribeMessage('emitId')
+  getId(socket: Socket, room: string) {
+    this.wss.to(room).emit('emittedId', socket.id);
+  }
+  
+  @SubscribeMessage('roomReady')
+  setReady(socket: Socket, room: string) {
+    this.wss.to(room).emit('roomReady')
+  }
+  
+  @SubscribeMessage('calluser')
+  callUser(socket: Socket, callData: { userToCall: string; signalData: any; }) {
+    this.wss
+    .to(callData.userToCall)
+    .emit('usercalling', { signal: callData.signalData, from: socket.id });
+  }
+  
+  @SubscribeMessage('answercall')
+  answerCall(socket: Socket, { signal, to }) {
+    this.wss.to(to).emit('callaccepted', signal);
+  }
+
+  @SubscribeMessage('disconnect')
+  handleDisconnect(socket: Socket) {
+    socket.broadcast.emit('callended');
   }
 }
