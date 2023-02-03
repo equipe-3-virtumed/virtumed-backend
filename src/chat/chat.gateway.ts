@@ -35,7 +35,7 @@ export class ChatGateway implements OnGatewayInit {
 
   @SubscribeMessage('emitId')
   getId(socket: Socket, room: string) {
-    this.wss.to(room).emit('emitId', socket.id)
+    this.wss.to(room).emit('emittedId', socket.id);
   }
 
   @SubscribeMessage('disconnect')
@@ -44,14 +44,15 @@ export class ChatGateway implements OnGatewayInit {
   }
 
   @SubscribeMessage('calluser')
-  callUser({ userToCall, signalData, from, name }) {
+  callUser(socket: Socket, callData: { userToCall: string; signalData: any; }) {
     this.wss
-      .to(userToCall)
-      .emit('calluser', { signal: signalData, from, name });
+      .to(callData.userToCall)
+      .emit('usercalling', { signal: callData.signalData, from: socket.id });
   }
 
   @SubscribeMessage('answercall')
-  answerCall(data) {
-    this.wss.to(data.to).emit('callaccepted', data.signal);
+  answerCall(socket: Socket, { signal, to }) {
+    this.wss.to(to).emit('callaccepted', signal);
+    console.log("🚀 ~ file: chat.gateway.ts:56 ~ ChatGateway ~ answerCall ~ signal", signal)
   }
 }
